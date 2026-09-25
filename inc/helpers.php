@@ -29,9 +29,23 @@ function bluewireseo_logo( $class = 'bws-logo', $height = '36' ) {
         );
     }
 
-    // Try theme asset logo
-    $logo_path = BLUEWIRESEO_DIR . '/assets/images/logo.png';
-    $logo_uri  = BLUEWIRESEO_URI . '/assets/images/logo.png';
+    // Try theme asset logo (SVG first, then PNG)
+    $logo_svg_path = BLUEWIRESEO_DIR . '/assets/images/logo.svg';
+    $logo_svg_uri  = BLUEWIRESEO_URI . '/assets/images/logo.svg';
+    $logo_path     = BLUEWIRESEO_DIR . '/assets/images/logo.png';
+    $logo_uri      = BLUEWIRESEO_URI . '/assets/images/logo.png';
+
+    if ( file_exists( $logo_svg_path ) ) {
+        return sprintf(
+            '<a href="%s" class="%s" rel="home" aria-label="%s"><img src="%s" alt="%s" height="%s" loading="eager" decoding="async" /></a>',
+            esc_url( home_url( '/' ) ),
+            esc_attr( $class ),
+            esc_attr( get_bloginfo( 'name' ) ),
+            esc_url( $logo_svg_uri ),
+            esc_attr( get_bloginfo( 'name' ) ),
+            esc_attr( $height )
+        );
+    }
 
     if ( file_exists( $logo_path ) ) {
         return sprintf(
@@ -71,8 +85,19 @@ function bluewireseo_footer_logo() {
         );
     }
 
-    $logo_path = BLUEWIRESEO_DIR . '/assets/images/logo.png';
-    $logo_uri  = BLUEWIRESEO_URI . '/assets/images/logo.png';
+    $logo_white_svg = BLUEWIRESEO_DIR . '/assets/images/logo-white.svg';
+    $logo_white_uri = BLUEWIRESEO_URI . '/assets/images/logo-white.svg';
+    $logo_path      = BLUEWIRESEO_DIR . '/assets/images/logo.png';
+    $logo_uri       = BLUEWIRESEO_URI . '/assets/images/logo.png';
+
+    if ( file_exists( $logo_white_svg ) ) {
+        return sprintf(
+            '<a href="%s" rel="home" class="bws-footer-logo-link"><img src="%s" alt="%s" height="32" loading="lazy" decoding="async" /></a>',
+            esc_url( home_url( '/' ) ),
+            esc_url( $logo_white_uri ),
+            esc_attr( get_bloginfo( 'name' ) )
+        );
+    }
 
     if ( file_exists( $logo_path ) ) {
         return sprintf(
@@ -96,7 +121,7 @@ function bluewireseo_footer_logo() {
  */
 function bluewireseo_get_email() {
     $email = get_theme_mod( 'bws_email', '' );
-    return $email ? $email : '[PLACEHOLDER: hello@bluewireseo.com]';
+    return $email ? $email : 'nishan@bluewireseo.com';
 }
 
 /**
@@ -104,7 +129,7 @@ function bluewireseo_get_email() {
  */
 function bluewireseo_get_phone() {
     $phone = get_theme_mod( 'bws_phone', '' );
-    return $phone ? $phone : '[PLACEHOLDER: +1 (xxx) xxx-xxxx]';
+    return $phone ? $phone : '+8801927497396';
 }
 
 /**
@@ -150,6 +175,9 @@ function bluewireseo_breadcrumb() {
         } elseif ( 'bws_industry' === $post_type ) {
             $breadcrumb .= $separator;
             $breadcrumb .= '<a href="' . esc_url( home_url( '/industries/' ) ) . '">' . __( 'Industries', 'bluewireseo' ) . '</a>';
+        } elseif ( 'bws_portfolio' === $post_type ) {
+            $breadcrumb .= $separator;
+            $breadcrumb .= '<a href="' . esc_url( home_url( '/portfolio/' ) ) . '">' . __( 'Portfolio', 'bluewireseo' ) . '</a>';
         } elseif ( 'post' === $post_type ) {
             $breadcrumb .= $separator;
             $breadcrumb .= '<a href="' . esc_url( home_url( '/blog/' ) ) . '">' . __( 'Blog', 'bluewireseo' ) . '</a>';
@@ -164,6 +192,8 @@ function bluewireseo_breadcrumb() {
         $breadcrumb .= $separator . '<span class="current">' . __( 'Case Studies', 'bluewireseo' ) . '</span>';
     } elseif ( is_post_type_archive( 'bws_industry' ) ) {
         $breadcrumb .= $separator . '<span class="current">' . __( 'Industries', 'bluewireseo' ) . '</span>';
+    } elseif ( is_post_type_archive( 'bws_portfolio' ) ) {
+        $breadcrumb .= $separator . '<span class="current">' . __( 'Portfolio', 'bluewireseo' ) . '</span>';
     } elseif ( is_home() || is_archive() ) {
         $breadcrumb .= $separator . '<span class="current">' . __( 'Blog', 'bluewireseo' ) . '</span>';
     } elseif ( is_page() ) {
@@ -310,3 +340,74 @@ function bluewireseo_case_study_card( $post_id ) {
     <?php
     return ob_get_clean();
 }
+
+/**
+ * Portfolio card output
+ */
+function bluewireseo_portfolio_card( $post_id ) {
+    $title        = get_the_title( $post_id );
+    $permalink    = get_permalink( $post_id );
+    $excerpt      = get_the_excerpt( $post_id );
+    $client       = get_post_meta( $post_id, '_bws_client', true );
+    $industry     = get_post_meta( $post_id, '_bws_industry', true );
+    $services     = get_post_meta( $post_id, '_bws_services_used', true );
+    $result       = get_post_meta( $post_id, '_bws_result_metric', true );
+    $external_url = get_post_meta( $post_id, '_bws_external_url', true );
+    $categories   = get_the_terms( $post_id, 'bws_portfolio_category' );
+    $cat_name     = ( $categories && ! is_wp_error( $categories ) ) ? $categories[0]->name : $industry;
+
+    ob_start();
+    ?>
+    <article class="bws-case-card bws-portfolio-card">
+        <?php if ( has_post_thumbnail( $post_id ) ) : ?>
+            <div style="margin:-1.75rem -1.75rem 1.25rem;border-radius:var(--bws-radius-lg) var(--bws-radius-lg) 0 0;overflow:hidden;height:180px;">
+                <a href="<?php echo esc_url( $permalink ); ?>">
+                    <?php echo get_the_post_thumbnail( $post_id, 'bws-card', array( 'style' => 'width:100%;height:100%;object-fit:cover;' ) ); ?>
+                </a>
+            </div>
+        <?php endif; ?>
+
+        <div class="bws-case-card-tags">
+            <?php if ( $cat_name ) : ?>
+                <span class="bws-card-tag tag-b2b"><?php echo esc_html( $cat_name ); ?></span>
+            <?php endif; ?>
+            <?php if ( $services ) : ?>
+                <span class="bws-card-tag" style="background:var(--bws-light-bg);color:var(--bws-text-muted);"><?php echo esc_html( $services ); ?></span>
+            <?php endif; ?>
+        </div>
+
+        <h3 class="bws-case-card-title">
+            <a href="<?php echo esc_url( $permalink ); ?>" style="color:inherit;text-decoration:none;"><?php echo esc_html( $title ); ?></a>
+        </h3>
+
+        <?php if ( $client ) : ?>
+            <p class="bws-case-card-subtitle"><?php echo esc_html( sprintf( __( 'Client: %s', 'bluewireseo' ), $client ) ); ?></p>
+        <?php endif; ?>
+
+        <?php if ( $excerpt ) : ?>
+            <p class="bws-case-card-desc"><?php echo esc_html( $excerpt ); ?></p>
+        <?php endif; ?>
+
+        <?php if ( $result ) : ?>
+            <div style="margin-bottom:1rem;padding:0.5rem 0.75rem;background:var(--bws-primary-light);border-radius:var(--bws-radius-sm);font-size:0.875rem;color:var(--bws-primary-dark);font-weight:600;">
+                <?php echo esc_html( $result ); ?>
+            </div>
+        <?php endif; ?>
+
+        <div style="display:flex;gap:0.75rem;align-items:center;flex-wrap:wrap;margin-top:auto;">
+            <a href="<?php echo esc_url( $permalink ); ?>" class="bws-link-arrow" style="font-weight:600;">
+                <?php esc_html_e( 'View Details', 'bluewireseo' ); ?>
+                <?php echo bluewireseo_icon( 'arrow-right' ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
+            </a>
+            <?php if ( $external_url ) : ?>
+                <a href="<?php echo esc_url( $external_url ); ?>" target="_blank" rel="noopener noreferrer" class="bws-link-arrow" style="font-size:0.85rem;color:var(--bws-text-muted);">
+                    <?php esc_html_e( 'Visit Site', 'bluewireseo' ); ?>
+                    <?php echo bluewireseo_icon( 'external-link' ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
+                </a>
+            <?php endif; ?>
+        </div>
+    </article>
+    <?php
+    return ob_get_clean();
+}
+

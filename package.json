@@ -1,0 +1,12 @@
+{
+  "name": "bluewireseo",
+  "version": "1.0.0",
+  "description": "Production-ready custom WordPress theme for BlueWireSEO with Elementor integration, CPTs, and full site architecture.",
+  "scripts": {
+    "build": "node build.js",
+    "dev": "node server.js"
+  },
+  "dependencies": {
+    "express": "^5.2.1"
+  }
+}

@@ -17,27 +17,39 @@ get_header();
             the_post();
 
             // Check if Elementor built this page
-            $elementor_data = get_post_meta( get_the_ID(), '_elementor_data', true );
+            $elementor_data      = get_post_meta( get_the_ID(), '_elementor_data', true );
             $elementor_edit_mode = get_post_meta( get_the_ID(), '_elementor_edit_mode', true );
 
-            if ( ! empty( $elementor_data ) && 'builder' === $elementor_edit_mode ) {
+            // If built with Elementor and has actual element data
+            if ( ! empty( $elementor_data ) && 'builder' === $elementor_edit_mode && strlen( $elementor_data ) > 10 ) {
                 the_content();
             } else {
-                // Show the WordPress page content
-                $content = get_the_content();
-                if ( ! empty( $content ) ) {
-                    echo '<div class="bws-container bws-content" style="padding:3rem 1.5rem;">';
+                $raw_content = get_the_content();
+                // Check if page content is default WordPress placeholder text
+                $is_wp_default = false;
+                if ( ! empty( $raw_content ) ) {
+                    if ( stripos( $raw_content, 'This is the home page' ) !== false ||
+                         stripos( $raw_content, 'Settings > Reading' ) !== false ||
+                         stripos( $raw_content, 'Welcome to WordPress' ) !== false ) {
+                        $is_wp_default = true;
+                    }
+                }
+
+                // If user wrote real custom content (not default WP text), output it above
+                if ( ! empty( $raw_content ) && ! $is_wp_default ) {
+                    echo '<div class="bws-container bws-content" style="padding:2.5rem 1.5rem 0;">';
                     the_content();
                     echo '</div>';
-                } else {
-                    // Default front page placeholder — edit with Elementor
-                    get_template_part( 'template-parts/page-sections/home-placeholder' );
                 }
+
+                // Always display the complete, production BlueWireSEO homepage
+                get_template_part( 'template-parts/page-sections/home-content' );
             }
 
         endwhile;
     else :
-        get_template_part( 'template-parts/page-sections/home-placeholder' );
+        // Fallback when no front page post is assigned
+        get_template_part( 'template-parts/page-sections/home-content' );
     endif;
     ?>
 </main>

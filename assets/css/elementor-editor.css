@@ -1,9 +1,56 @@
 /**
  * BlueWireSEO Elementor Editor Styles
+ * Ensures the Elementor editor preview exactly matches the frontend visual system
+ *
+ * @package BlueWireSEO
  */
 
+:root {
+  --bws-primary: #2563EB;
+  --bws-primary-dark: #1D4ED8;
+  --bws-primary-light: #EFF6FF;
+  --bws-navy: #0F1B3D;
+  --bws-navy-dark: #0A1228;
+  --bws-navy-medium: #1E2D5A;
+  --bws-accent: #2563EB;
+  --bws-white: #FFFFFF;
+  --bws-off-white: #F8F9FA;
+  --bws-light-bg: #F4F6F9;
+  --bws-border: #E2E8F0;
+  --bws-text: #1A1A2E;
+  --bws-text-secondary: #4A5568;
+  --bws-text-muted: #718096;
+  --bws-font-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --bws-font-heading: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --bws-radius-sm: 4px;
+  --bws-radius-md: 8px;
+  --bws-radius-lg: 12px;
+  --bws-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.06);
+  --bws-shadow-md: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
 .elementor-panel .elementor-panel-category-title[data-category="bluewireseo"] {
-    background: #EFF6FF;
-    color: #2563EB;
-    font-weight: 700;
+  background: #EFF6FF;
+  color: #2563EB;
+  font-weight: 700;
+}
+
+/* Editor typography and container parity */
+.elementor-editor-active .elementor-section.elementor-section-boxed > .elementor-container {
+  max-width: 1200px;
+}
+
+.elementor-editor-active h1,
+.elementor-editor-active h2,
+.elementor-editor-active h3,
+.elementor-editor-active h4 {
+  font-family: var(--bws-font-heading);
+  color: var(--bws-navy);
+  letter-spacing: -0.02em;
+}
+
+.elementor-editor-active .bws-card,
+.elementor-editor-active .bws-service-card,
+.elementor-editor-active .bws-case-card {
+  font-family: var(--bws-font-primary);
 }

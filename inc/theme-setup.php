@@ -149,6 +149,9 @@ function bluewireseo_body_classes( $classes ) {
     if ( is_singular( 'bws_industry' ) ) {
         $classes[] = 'bws-industry-single';
     }
+    if ( is_singular( 'bws_portfolio' ) ) {
+        $classes[] = 'bws-portfolio-single';
+    }
 
     return $classes;
 }

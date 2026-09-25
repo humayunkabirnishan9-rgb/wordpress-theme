@@ -1,0 +1,60 @@
+{
+  "version": "0.4",
+  "title": "BlueWireSEO Single Industry Template",
+  "type": "single-post",
+  "content": [
+    {
+      "id": "bws_single_ind_hero",
+      "elType": "section",
+      "settings": {
+        "layout": "full_width",
+        "background_background": "classic",
+        "background_color": "#F4F6F9",
+        "padding": { "unit": "px", "top": "60", "bottom": "60", "isLinked": false }
+      },
+      "elements": [
+        {
+          "id": "bws_single_ind_col",
+          "elType": "column",
+          "settings": { "_column_size": 100 },
+          "elements": [
+            {
+              "id": "bws_single_ind_title",
+              "elType": "widget",
+              "widgetType": "theme-post-title",
+              "settings": { "header_size": "h1" }
+            },
+            {
+              "id": "bws_single_ind_excerpt",
+              "elType": "widget",
+              "widgetType": "theme-post-excerpt",
+              "settings": {}
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "bws_single_ind_body",
+      "elType": "section",
+      "settings": {
+        "padding": { "unit": "px", "top": "50", "bottom": "50", "isLinked": false }
+      },
+      "elements": [
+        {
+          "id": "bws_single_ind_content_col",
+          "elType": "column",
+          "settings": { "_column_size": 100 },
+          "elements": [
+            {
+              "id": "bws_single_ind_content",
+              "elType": "widget",
+              "widgetType": "theme-post-content",
+              "settings": {}
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

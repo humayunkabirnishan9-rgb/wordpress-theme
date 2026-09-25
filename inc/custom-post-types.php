@@ -166,6 +166,57 @@ function bluewireseo_register_post_types() {
     );
 
     register_post_type( 'bws_industry', $industry_args );
+
+    // ============================
+    // PORTFOLIO CPT
+    // ============================
+    $portfolio_labels = array(
+        'name'                  => _x( 'Portfolio', 'Post Type General Name', 'bluewireseo' ),
+        'singular_name'         => _x( 'Portfolio Item', 'Post Type Singular Name', 'bluewireseo' ),
+        'menu_name'             => __( 'Portfolio', 'bluewireseo' ),
+        'name_admin_bar'        => __( 'Portfolio Item', 'bluewireseo' ),
+        'archives'              => __( 'Portfolio Archives', 'bluewireseo' ),
+        'all_items'             => __( 'All Portfolio Items', 'bluewireseo' ),
+        'add_new_item'          => __( 'Add New Project', 'bluewireseo' ),
+        'add_new'               => __( 'Add New', 'bluewireseo' ),
+        'new_item'              => __( 'New Portfolio Item', 'bluewireseo' ),
+        'edit_item'             => __( 'Edit Portfolio Item', 'bluewireseo' ),
+        'update_item'           => __( 'Update Portfolio Item', 'bluewireseo' ),
+        'view_item'             => __( 'View Project', 'bluewireseo' ),
+        'view_items'            => __( 'View Projects', 'bluewireseo' ),
+        'search_items'          => __( 'Search Portfolio', 'bluewireseo' ),
+        'not_found'             => __( 'No portfolio items found.', 'bluewireseo' ),
+        'not_found_in_trash'    => __( 'No portfolio items found in Trash.', 'bluewireseo' ),
+        'featured_image'        => __( 'Project Feature Image', 'bluewireseo' ),
+        'set_featured_image'    => __( 'Set feature image', 'bluewireseo' ),
+        'remove_featured_image' => __( 'Remove feature image', 'bluewireseo' ),
+        'use_featured_image'    => __( 'Use as feature image', 'bluewireseo' ),
+    );
+
+    $portfolio_args = array(
+        'label'               => __( 'Portfolio', 'bluewireseo' ),
+        'description'         => __( 'BlueWireSEO Portfolio Projects', 'bluewireseo' ),
+        'labels'              => $portfolio_labels,
+        'supports'            => array( 'title', 'editor', 'thumbnail', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ),
+        'taxonomies'          => array( 'bws_portfolio_category' ),
+        'hierarchical'        => false,
+        'public'              => true,
+        'show_ui'             => true,
+        'show_in_menu'        => true,
+        'menu_position'       => 8,
+        'menu_icon'           => 'dashicons-portfolio',
+        'show_in_admin_bar'   => true,
+        'show_in_nav_menus'   => true,
+        'can_export'          => true,
+        'has_archive'         => 'portfolio',
+        'exclude_from_search' => false,
+        'publicly_queryable'  => true,
+        'rewrite'             => array( 'slug' => 'portfolio', 'with_front' => false ),
+        'capability_type'     => 'post',
+        'show_in_rest'        => true,
+    );
+
+    register_post_type( 'bws_portfolio', $portfolio_args );
 }
 add_action( 'init', 'bluewireseo_register_post_types' );
 
@@ -238,6 +289,27 @@ function bluewireseo_register_taxonomies() {
         'rewrite'           => array( 'slug' => 'industry-category' ),
         'show_in_rest'      => true,
     ) );
+
+    // Portfolio Category
+    register_taxonomy( 'bws_portfolio_category', array( 'bws_portfolio' ), array(
+        'hierarchical'      => true,
+        'labels'            => array(
+            'name'              => _x( 'Portfolio Categories', 'taxonomy general name', 'bluewireseo' ),
+            'singular_name'     => _x( 'Portfolio Category', 'taxonomy singular name', 'bluewireseo' ),
+            'search_items'      => __( 'Search Portfolio Categories', 'bluewireseo' ),
+            'all_items'         => __( 'All Portfolio Categories', 'bluewireseo' ),
+            'edit_item'         => __( 'Edit Portfolio Category', 'bluewireseo' ),
+            'update_item'       => __( 'Update Portfolio Category', 'bluewireseo' ),
+            'add_new_item'      => __( 'Add New Portfolio Category', 'bluewireseo' ),
+            'new_item_name'     => __( 'New Portfolio Category Name', 'bluewireseo' ),
+            'menu_name'         => __( 'Categories', 'bluewireseo' ),
+        ),
+        'show_ui'           => true,
+        'show_admin_column' => true,
+        'query_var'         => true,
+        'rewrite'           => array( 'slug' => 'portfolio-category' ),
+        'show_in_rest'      => true,
+    ) );
 }
 add_action( 'init', 'bluewireseo_register_taxonomies' );
 
@@ -271,6 +343,16 @@ function bluewireseo_register_meta_boxes() {
         __( 'Industry Details', 'bluewireseo' ),
         'bluewireseo_industry_meta_box',
         'bws_industry',
+        'side',
+        'high'
+    );
+
+    // Portfolio meta
+    add_meta_box(
+        'bws_portfolio_details',
+        __( 'Portfolio Project Details', 'bluewireseo' ),
+        'bluewireseo_portfolio_meta_box',
+        'bws_portfolio',
         'side',
         'high'
     );
@@ -372,6 +454,47 @@ function bluewireseo_industry_meta_box( $post ) {
 }
 
 /**
+ * Portfolio Meta Box Callback
+ */
+function bluewireseo_portfolio_meta_box( $post ) {
+    wp_nonce_field( 'bws_portfolio_meta', 'bws_portfolio_nonce' );
+    $client       = get_post_meta( $post->ID, '_bws_client', true );
+    $industry     = get_post_meta( $post->ID, '_bws_industry', true );
+    $services     = get_post_meta( $post->ID, '_bws_services_used', true );
+    $external_url = get_post_meta( $post->ID, '_bws_external_url', true );
+    $result       = get_post_meta( $post->ID, '_bws_result_metric', true );
+    $project_date = get_post_meta( $post->ID, '_bws_project_date', true );
+    ?>
+    <table class="form-table bws-meta-table">
+        <tr>
+            <th><label for="bws_port_client"><?php esc_html_e( 'Client / Brand', 'bluewireseo' ); ?></label></th>
+            <td><input type="text" id="bws_port_client" name="bws_port_client" value="<?php echo esc_attr( $client ); ?>" class="widefat" placeholder="Client Name" /></td>
+        </tr>
+        <tr>
+            <th><label for="bws_port_industry"><?php esc_html_e( 'Industry', 'bluewireseo' ); ?></label></th>
+            <td><input type="text" id="bws_port_industry" name="bws_port_industry" value="<?php echo esc_attr( $industry ); ?>" class="widefat" placeholder="e.g. OOH Advertising" /></td>
+        </tr>
+        <tr>
+            <th><label for="bws_port_services"><?php esc_html_e( 'Services Provided', 'bluewireseo' ); ?></label></th>
+            <td><input type="text" id="bws_port_services" name="bws_port_services" value="<?php echo esc_attr( $services ); ?>" class="widefat" placeholder="e.g. Semantic SEO, Technical Audit" /></td>
+        </tr>
+        <tr>
+            <th><label for="bws_port_url"><?php esc_html_e( 'Live Website URL', 'bluewireseo' ); ?></label></th>
+            <td><input type="url" id="bws_port_url" name="bws_port_url" value="<?php echo esc_attr( $external_url ); ?>" class="widefat" placeholder="https://" /></td>
+        </tr>
+        <tr>
+            <th><label for="bws_port_result"><?php esc_html_e( 'Key Result / Impact', 'bluewireseo' ); ?></label></th>
+            <td><input type="text" id="bws_port_result" name="bws_port_result" value="<?php echo esc_attr( $result ); ?>" class="widefat" placeholder="e.g. +140% Qualified Inbound" /></td>
+        </tr>
+        <tr>
+            <th><label for="bws_port_date"><?php esc_html_e( 'Timeline / Date', 'bluewireseo' ); ?></label></th>
+            <td><input type="text" id="bws_port_date" name="bws_port_date" value="<?php echo esc_attr( $project_date ); ?>" class="widefat" placeholder="e.g. Q3 2024" /></td>
+        </tr>
+    </table>
+    <?php
+}
+
+/**
  * Save Meta Box Data
  */
 function bluewireseo_save_meta_boxes( $post_id ) {
@@ -425,6 +548,27 @@ function bluewireseo_save_meta_boxes( $post_id ) {
         foreach ( $fields as $field => $meta_key ) {
             if ( isset( $_POST[ $field ] ) ) {
                 update_post_meta( $post_id, $meta_key, sanitize_text_field( wp_unslash( $_POST[ $field ] ) ) );
+            }
+        }
+    }
+
+    // Portfolio
+    if ( isset( $_POST['bws_portfolio_nonce'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['bws_portfolio_nonce'] ) ), 'bws_portfolio_meta' ) ) {
+        $fields = array(
+            'bws_port_client'   => '_bws_client',
+            'bws_port_industry' => '_bws_industry',
+            'bws_port_services' => '_bws_services_used',
+            'bws_port_url'      => '_bws_external_url',
+            'bws_port_result'   => '_bws_result_metric',
+            'bws_port_date'     => '_bws_project_date',
+        );
+        foreach ( $fields as $field => $meta_key ) {
+            if ( isset( $_POST[ $field ] ) ) {
+                if ( 'bws_port_url' === $field ) {
+                    update_post_meta( $post_id, $meta_key, esc_url_raw( wp_unslash( $_POST[ $field ] ) ) );
+                } else {
+                    update_post_meta( $post_id, $meta_key, sanitize_text_field( wp_unslash( $_POST[ $field ] ) ) );
+                }
             }
         }
     }

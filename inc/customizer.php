@@ -34,26 +34,26 @@ function bluewireseo_customizer_register( $wp_customize ) {
 
     // Email
     $wp_customize->add_setting( 'bws_email', array(
-        'default'           => '',
+        'default'           => 'nishan@bluewireseo.com',
         'sanitize_callback' => 'sanitize_email',
         'transport'         => 'refresh',
     ) );
     $wp_customize->add_control( 'bws_email', array(
         'label'       => __( 'Email Address', 'bluewireseo' ),
-        'description' => __( 'e.g. hello@bluewireseo.com', 'bluewireseo' ),
+        'description' => __( 'Official contact email, e.g. nishan@bluewireseo.com', 'bluewireseo' ),
         'section'     => 'bws_contact',
         'type'        => 'email',
     ) );
 
     // Phone
     $wp_customize->add_setting( 'bws_phone', array(
-        'default'           => '',
+        'default'           => '+8801927497396',
         'sanitize_callback' => 'sanitize_text_field',
         'transport'         => 'refresh',
     ) );
     $wp_customize->add_control( 'bws_phone', array(
         'label'       => __( 'Phone Number', 'bluewireseo' ),
-        'description' => __( 'e.g. +1 (xxx) xxx-xxxx', 'bluewireseo' ),
+        'description' => __( 'Direct contact phone number, e.g. +8801927497396', 'bluewireseo' ),
         'section'     => 'bws_contact',
         'type'        => 'text',
     ) );
@@ -93,13 +93,13 @@ function bluewireseo_customizer_register( $wp_customize ) {
 
     // WhatsApp Number
     $wp_customize->add_setting( 'bws_whatsapp_number', array(
-        'default'           => '',
+        'default'           => '8801927497396',
         'sanitize_callback' => 'sanitize_text_field',
         'transport'         => 'refresh',
     ) );
     $wp_customize->add_control( 'bws_whatsapp_number', array(
         'label'       => __( 'WhatsApp Number', 'bluewireseo' ),
-        'description' => __( 'Include country code. e.g. +1xxxxxxxxxx — numbers only, no spaces or dashes.', 'bluewireseo' ),
+        'description' => __( 'Include country code without plus or spaces (e.g. 8801927497396).', 'bluewireseo' ),
         'section'     => 'bws_whatsapp',
         'type'        => 'text',
     ) );
@@ -244,32 +244,85 @@ function bluewireseo_customizer_register( $wp_customize ) {
     // SECTION: Colors
     // ============================
     $wp_customize->add_section( 'bws_colors', array(
-        'title'    => __( 'Brand Colors', 'bluewireseo' ),
+        'title'    => __( 'Brand Colors & Design Tokens', 'bluewireseo' ),
         'panel'    => 'bws_theme_settings',
         'priority' => 60,
     ) );
 
-    // Primary Color
-    $wp_customize->add_setting( 'bws_primary_color', array(
-        'default'           => '#2563EB',
-        'sanitize_callback' => 'sanitize_hex_color',
-        'transport'         => 'postMessage',
-    ) );
-    $wp_customize->add_control( new WP_Customize_Color_Control( $wp_customize, 'bws_primary_color', array(
-        'label'   => __( 'Primary Color (Blue)', 'bluewireseo' ),
-        'section' => 'bws_colors',
-    ) ) );
+    // Color definitions
+    $color_settings = array(
+        'bws_primary_color'       => array( 'label' => __( 'Primary Brand Color', 'bluewireseo' ), 'default' => '#2563EB' ),
+        'bws_navy_color'          => array( 'label' => __( 'Navy / Hero Color', 'bluewireseo' ), 'default' => '#0F1B3D' ),
+        'bws_secondary_color'     => array( 'label' => __( 'Secondary Medium Navy', 'bluewireseo' ), 'default' => '#1E2D5A' ),
+        'bws_accent_color'        => array( 'label' => __( 'Accent Color', 'bluewireseo' ), 'default' => '#2563EB' ),
+        'bws_text_color'          => array( 'label' => __( 'Body Text Color', 'bluewireseo' ), 'default' => '#1A1A2E' ),
+        'bws_text_muted_color'    => array( 'label' => __( 'Muted Text Color', 'bluewireseo' ), 'default' => '#718096' ),
+        'bws_bg_color'            => array( 'label' => __( 'Site Background Color', 'bluewireseo' ), 'default' => '#FFFFFF' ),
+        'bws_surface_color'       => array( 'label' => __( 'Surface / Light BG Color', 'bluewireseo' ), 'default' => '#F4F6F9' ),
+        'bws_border_color'        => array( 'label' => __( 'Border Color', 'bluewireseo' ), 'default' => '#E2E8F0' ),
+        'bws_btn_color'           => array( 'label' => __( 'Primary Button Color', 'bluewireseo' ), 'default' => '#2563EB' ),
+        'bws_btn_hover_color'     => array( 'label' => __( 'Button Hover Color', 'bluewireseo' ), 'default' => '#1D4ED8' ),
+    );
 
-    // Navy Color
-    $wp_customize->add_setting( 'bws_navy_color', array(
-        'default'           => '#0F1B3D',
-        'sanitize_callback' => 'sanitize_hex_color',
-        'transport'         => 'postMessage',
+    foreach ( $color_settings as $key => $conf ) {
+        $wp_customize->add_setting( $key, array(
+            'default'           => $conf['default'],
+            'sanitize_callback' => 'sanitize_hex_color',
+            'transport'         => 'postMessage',
+        ) );
+        $wp_customize->add_control( new WP_Customize_Color_Control( $wp_customize, $key, array(
+            'label'   => $conf['label'],
+            'section' => 'bws_colors',
+        ) ) );
+    }
+
+    // ============================
+    // SECTION: Typography
+    // ============================
+    $wp_customize->add_section( 'bws_typography', array(
+        'title'    => __( 'Global Typography', 'bluewireseo' ),
+        'panel'    => 'bws_theme_settings',
+        'priority' => 70,
     ) );
-    $wp_customize->add_control( new WP_Customize_Color_Control( $wp_customize, 'bws_navy_color', array(
-        'label'   => __( 'Navy Color (Dark)', 'bluewireseo' ),
-        'section' => 'bws_colors',
-    ) ) );
+
+    // Heading Font
+    $wp_customize->add_setting( 'bws_font_heading', array(
+        'default'           => 'Inter',
+        'sanitize_callback' => 'sanitize_text_field',
+        'transport'         => 'refresh',
+    ) );
+    $wp_customize->add_control( 'bws_font_heading', array(
+        'label'       => __( 'Heading Font Family', 'bluewireseo' ),
+        'description' => __( 'Choose heading font family.', 'bluewireseo' ),
+        'section'     => 'bws_typography',
+        'type'        => 'select',
+        'choices'     => array(
+            'Inter'             => 'Inter (Default)',
+            'Plus Jakarta Sans' => 'Plus Jakarta Sans',
+            'Outfit'            => 'Outfit',
+            'Poppins'           => 'Poppins',
+            'Montserrat'        => 'Montserrat',
+        ),
+    ) );
+
+    // Body Font
+    $wp_customize->add_setting( 'bws_font_body', array(
+        'default'           => 'Inter',
+        'sanitize_callback' => 'sanitize_text_field',
+        'transport'         => 'refresh',
+    ) );
+    $wp_customize->add_control( 'bws_font_body', array(
+        'label'       => __( 'Body Font Family', 'bluewireseo' ),
+        'description' => __( 'Choose body text font family.', 'bluewireseo' ),
+        'section'     => 'bws_typography',
+        'type'        => 'select',
+        'choices'     => array(
+            'Inter'             => 'Inter (Default)',
+            'Plus Jakarta Sans' => 'Plus Jakarta Sans',
+            'Open Sans'         => 'Open Sans',
+            'Roboto'            => 'Roboto',
+        ),
+    ) );
 }
 add_action( 'customize_register', 'bluewireseo_customizer_register' );
 
@@ -284,20 +337,39 @@ function bluewireseo_sanitize_checkbox( $checked ) {
  * Output dynamic CSS from customizer
  */
 function bluewireseo_customizer_css() {
-    $primary = get_theme_mod( 'bws_primary_color', '#2563EB' );
-    $navy    = get_theme_mod( 'bws_navy_color', '#0F1B3D' );
+    $primary     = get_theme_mod( 'bws_primary_color', '#2563EB' );
+    $navy        = get_theme_mod( 'bws_navy_color', '#0F1B3D' );
+    $secondary   = get_theme_mod( 'bws_secondary_color', '#1E2D5A' );
+    $accent      = get_theme_mod( 'bws_accent_color', '#2563EB' );
+    $text        = get_theme_mod( 'bws_text_color', '#1A1A2E' );
+    $text_muted  = get_theme_mod( 'bws_text_muted_color', '#718096' );
+    $bg          = get_theme_mod( 'bws_bg_color', '#FFFFFF' );
+    $surface     = get_theme_mod( 'bws_surface_color', '#F4F6F9' );
+    $border      = get_theme_mod( 'bws_border_color', '#E2E8F0' );
+    $btn         = get_theme_mod( 'bws_btn_color', '#2563EB' );
+    $btn_hover   = get_theme_mod( 'bws_btn_hover_color', '#1D4ED8' );
+    $font_head   = get_theme_mod( 'bws_font_heading', 'Inter' );
+    $font_body   = get_theme_mod( 'bws_font_body', 'Inter' );
 
-    if ( '#2563EB' !== $primary || '#0F1B3D' !== $navy ) {
-        echo '<style id="bws-customizer-css">';
-        echo ':root {';
-        if ( '#2563EB' !== $primary ) {
-            echo '--bws-primary: ' . sanitize_hex_color( $primary ) . ';';
-        }
-        if ( '#0F1B3D' !== $navy ) {
-            echo '--bws-navy: ' . sanitize_hex_color( $navy ) . ';';
-        }
-        echo '}';
-        echo '</style>';
+    echo '<style id="bws-customizer-css">';
+    echo ':root {';
+    echo '--bws-primary: ' . sanitize_hex_color( $primary ) . ';';
+    echo '--bws-navy: ' . sanitize_hex_color( $navy ) . ';';
+    echo '--bws-navy-medium: ' . sanitize_hex_color( $secondary ) . ';';
+    echo '--bws-accent: ' . sanitize_hex_color( $accent ) . ';';
+    echo '--bws-text: ' . sanitize_hex_color( $text ) . ';';
+    echo '--bws-text-muted: ' . sanitize_hex_color( $text_muted ) . ';';
+    echo '--bws-white: ' . sanitize_hex_color( $bg ) . ';';
+    echo '--bws-light-bg: ' . sanitize_hex_color( $surface ) . ';';
+    echo '--bws-border: ' . sanitize_hex_color( $border ) . ';';
+    echo '--bws-primary-dark: ' . sanitize_hex_color( $btn_hover ) . ';';
+    if ( 'Inter' !== $font_head ) {
+        echo '--bws-font-heading: "' . esc_attr( $font_head ) . '", sans-serif;';
     }
+    if ( 'Inter' !== $font_body ) {
+        echo '--bws-font-primary: "' . esc_attr( $font_body ) . '", sans-serif;';
+    }
+    echo '}';
+    echo '</style>';
 }
 add_action( 'wp_head', 'bluewireseo_customizer_css' );

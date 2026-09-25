@@ -1,0 +1,7 @@
+{
+  "name": "BlueWireSEO — WordPress Theme & Platform",
+  "description": "Custom production-ready WordPress theme for BlueWireSEO featuring Elementor integration, CPTs for Services, Case Studies, Industries, and Portfolio, 1-click demo content installer, and centralized design system.",
+  "capabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

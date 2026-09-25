@@ -25,3 +25,4 @@ require_once BLUEWIRESEO_DIR . '/inc/elementor.php';
 require_once BLUEWIRESEO_DIR . '/inc/helpers.php';
 require_once BLUEWIRESEO_DIR . '/inc/whatsapp.php';
 require_once BLUEWIRESEO_DIR . '/inc/social-links.php';
+require_once BLUEWIRESEO_DIR . '/inc/demo-importer.php';

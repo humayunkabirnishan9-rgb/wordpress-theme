@@ -1,0 +1,133 @@
+{
+  "version": "0.4",
+  "title": "BlueWireSEO Homepage",
+  "type": "page",
+  "content": [
+    {
+      "id": "bws_hero_sec",
+      "elType": "section",
+      "settings": {
+        "layout": "full_width",
+        "background_background": "gradient",
+        "background_color": "#0F1B3D",
+        "background_color_b": "#1E2D5A",
+        "background_gradient_angle": { "unit": "deg", "size": 135 },
+        "padding": { "unit": "px", "top": "90", "bottom": "90", "isLinked": false }
+      },
+      "elements": [
+        {
+          "id": "bws_hero_col",
+          "elType": "column",
+          "settings": { "_column_size": 100 },
+          "elements": [
+            {
+              "id": "bws_hero_eyebrow",
+              "elType": "widget",
+              "widgetType": "heading",
+              "settings": {
+                "title": "SEMANTIC SEO FOR US BUSINESSES",
+                "header_size": "p",
+                "title_color": "#93C5FD",
+                "typography_typography": "custom",
+                "typography_font_size": { "unit": "px", "size": 13 },
+                "typography_font_weight": "700",
+                "typography_letter_spacing": { "unit": "px", "size": 1.5 }
+              }
+            },
+            {
+              "id": "bws_hero_title",
+              "elType": "widget",
+              "widgetType": "heading",
+              "settings": {
+                "title": "SEO that connects your brand to the buyers already searching for you.",
+                "header_size": "h1",
+                "title_color": "#FFFFFF",
+                "typography_typography": "custom",
+                "typography_font_size": { "unit": "px", "size": 52 },
+                "typography_font_weight": "800",
+                "typography_line_height": { "unit": "em", "size": 1.15 }
+              }
+            },
+            {
+              "id": "bws_hero_desc",
+              "elType": "widget",
+              "widgetType": "text-editor",
+              "settings": {
+                "editor": "<p style=\"color:rgba(255,255,255,0.8); font-size:18px; line-height:1.65; max-width:680px;\">Guaranteed traffic, semantic, technical and local SEO updating that helps you rank in any major US city. Brands specialising in OOH billboard advertising, digital, transit and more.</p>"
+              }
+            },
+            {
+              "id": "bws_hero_btn",
+              "elType": "widget",
+              "widgetType": "button",
+              "settings": {
+                "text": "Get Free Audit",
+                "link": { "url": "/free-seo-audit/" },
+                "button_type": "primary",
+                "size": "lg"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "bws_problems_sec",
+      "elType": "section",
+      "settings": {
+        "padding": { "unit": "px", "top": "80", "bottom": "80", "isLinked": false },
+        "background_background": "classic",
+        "background_color": "#FFFFFF"
+      },
+      "elements": [
+        {
+          "id": "bws_prob_col",
+          "elType": "column",
+          "settings": { "_column_size": 100 },
+          "elements": [
+            {
+              "id": "bws_prob_head",
+              "elType": "widget",
+              "widgetType": "heading",
+              "settings": {
+                "title": "Why most SEO reports never turn into leads.",
+                "align": "center",
+                "header_size": "h2",
+                "title_color": "#0F1B3D"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "bws_services_sec",
+      "elType": "section",
+      "settings": {
+        "padding": { "unit": "px", "top": "80", "bottom": "80", "isLinked": false },
+        "background_background": "classic",
+        "background_color": "#F4F6F9"
+      },
+      "elements": [
+        {
+          "id": "bws_srv_col",
+          "elType": "column",
+          "settings": { "_column_size": 100 },
+          "elements": [
+            {
+              "id": "bws_srv_head",
+              "elType": "widget",
+              "widgetType": "heading",
+              "settings": {
+                "title": "SEO services that compound over time.",
+                "align": "center",
+                "header_size": "h2",
+                "title_color": "#0F1B3D"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
