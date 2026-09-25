@@ -661,25 +661,35 @@ body.admin-bar {
    HERO SECTIONS
    ============================================ */
 .bws-hero {
-  background: var(--bws-light-bg);
-  padding: 4rem 0 3rem;
-  border-bottom: 1px solid var(--bws-border);
+  background: linear-gradient(135deg, #0F1B3D 0%, #16244C 50%, #1E2D5A 100%);
+  color: #FFFFFF;
+  padding: 5rem 0;
+  position: relative;
+  overflow: hidden;
 }
 
-.bws-hero-title {
+.bws-hero-title,
+.bws-hero .bws-hero-title,
+.bws-hero h1,
+.bws-hero-dark .bws-hero-title,
+.bws-hero-dark h1 {
   font-size: clamp(2.25rem, 5vw, 3.75rem);
   font-weight: 800;
-  color: var(--bws-heading);
-  line-height: 1.1;
+  color: #FFFFFF !important;
+  line-height: 1.12;
   letter-spacing: -0.03em;
   margin-bottom: 1.25rem;
 }
 
-.bws-hero-subtitle {
+.bws-hero-subtitle,
+.bws-hero .bws-hero-subtitle,
+.bws-hero p,
+.bws-hero-dark .bws-hero-subtitle,
+.bws-hero-dark p {
   font-size: 1.125rem;
-  color: var(--bws-text-secondary);
+  color: rgba(255, 255, 255, 0.85) !important;
   line-height: 1.7;
-  max-width: 640px;
+  max-width: 680px;
   margin-bottom: 2rem;
 }
 
@@ -688,6 +698,40 @@ body.admin-bar {
   align-items: center;
   gap: 1rem;
   flex-wrap: wrap;
+}
+
+.bws-hero .bws-btn,
+.bws-hero-dark .bws-btn,
+.bws-content .bws-btn {
+  text-decoration: none !important;
+}
+
+.bws-hero .bws-btn-primary,
+.bws-hero-dark .bws-btn-primary,
+.bws-content .bws-btn-primary {
+  background: var(--bws-primary);
+  color: #FFFFFF !important;
+  border-color: var(--bws-primary);
+}
+
+.bws-hero .bws-btn-primary:hover,
+.bws-hero-dark .bws-btn-primary:hover,
+.bws-content .bws-btn-primary:hover {
+  background: var(--bws-primary-dark);
+  color: #FFFFFF !important;
+}
+
+.bws-hero .bws-btn-outline,
+.bws-hero-dark .bws-btn-outline {
+  border-color: rgba(255, 255, 255, 0.4);
+  color: #FFFFFF !important;
+}
+
+.bws-hero .bws-btn-outline:hover,
+.bws-hero-dark .bws-btn-outline:hover {
+  border-color: #FFFFFF;
+  background: rgba(255, 255, 255, 0.1);
+  color: #FFFFFF !important;
 }
 
 /* Page Hero Variant */

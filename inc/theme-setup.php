@@ -178,9 +178,11 @@ add_filter( 'excerpt_more', 'bluewireseo_excerpt_more' );
  */
 function bluewireseo_default_navigation() {
     $pages = array(
+        'Home'         => home_url( '/' ),
         'Services'     => home_url( '/services/' ),
         'Industries'   => home_url( '/industries/' ),
         'Case Studies' => home_url( '/case-studies/' ),
+        'Portfolio'    => home_url( '/portfolio/' ),
         'Process'      => home_url( '/process/' ),
         'About'        => home_url( '/about/' ),
         'Blog'         => home_url( '/blog/' ),
