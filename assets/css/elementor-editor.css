@@ -1,0 +1,9 @@
+/**
+ * BlueWireSEO Elementor Editor Styles
+ */
+
+.elementor-panel .elementor-panel-category-title[data-category="bluewireseo"] {
+    background: #EFF6FF;
+    color: #2563EB;
+    font-weight: 700;
+}

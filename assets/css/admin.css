@@ -1,0 +1,23 @@
+/**
+ * BlueWireSEO Admin Styles
+ */
+
+.bws-meta-table th {
+    padding: 8px 12px 8px 0;
+    font-weight: 600;
+    color: #1e293b;
+    vertical-align: top;
+    width: 140px;
+    font-size: 13px;
+}
+
+.bws-meta-table td {
+    padding: 6px 0;
+}
+
+.bws-meta-table input[type="text"],
+.bws-meta-table input[type="url"],
+.bws-meta-table input[type="email"],
+.bws-meta-table textarea {
+    width: 100%;
+}
