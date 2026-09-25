@@ -13,10 +13,10 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Enqueue frontend assets
  */
 function bluewireseo_enqueue_assets() {
-    // Google Fonts - Inter
+    // Google Fonts - Plus Jakarta Sans & Inter
     wp_enqueue_style(
         'bws-google-fonts',
-        'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap',
+        'https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Inter:wght@400;500;600;700;800;900&display=swap',
         array(),
         null
     );

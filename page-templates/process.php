@@ -1,7 +1,7 @@
 <?php
 /**
  * Template Name: BlueWireSEO — Process Page Template
- * Template Post Type: page
+ * Template Post Type: page, post, bws_portfolio, bws_case_study, bws_service, bws_industry
  *
  * @package BlueWireSEO
  */
@@ -17,97 +17,76 @@ $call_url  = bluewireseo_get_call_url();
     while ( have_posts() ) :
         the_post();
 
-        $elementor_data = get_post_meta( get_the_ID(), '_elementor_data', true );
-        $elementor_edit_mode = get_post_meta( get_the_ID(), '_elementor_edit_mode', true );
-
-        if ( ! empty( $elementor_data ) && 'builder' === $elementor_edit_mode && strlen( $elementor_data ) > 10 ) {
+        if ( bluewireseo_is_elementor_active( get_the_ID() ) ) {
+            echo '<div class="bws-elementor-container">';
             the_content();
+            echo '</div>';
         } else {
             ?>
-            <!-- Hero -->
-            <div class="bws-page-hero" style="background:var(--bws-light-bg); border-bottom:1px solid var(--bws-border); padding:3.5rem 0 3rem;">
+            <div class="bws-page-hero" style="background: linear-gradient(135deg, #0F1B3D 0%, #16244C 50%, #1E2D5A 100%); color:#FFFFFF; padding: 4.5rem 0 3.5rem;">
                 <div class="bws-container">
                     <?php echo bluewireseo_breadcrumb(); // phpcs:ignore WordPress.Security.EscapeOutput ?>
-                    <div style="max-width:720px; margin-top:1.25rem;">
-                        <p class="bws-eyebrow"><?php esc_html_e( 'OUR METHODOLOGY', 'bluewireseo' ); ?></p>
-                        <h1 class="bws-hero-title" style="font-size:clamp(2.25rem,4.5vw,3.25rem); margin-bottom:1rem;"><?php the_title(); ?></h1>
-                        <p class="bws-hero-subtitle" style="font-size:1.125rem; color:var(--bws-text-secondary); line-height:1.65;">
-                            <?php esc_html_e( 'How we systematically diagnose, repair, and scale organic search performance for commercial websites.', 'bluewireseo' ); ?>
+                    <div style="max-width: 760px; margin-top: 1.25rem;">
+                        <p class="bws-eyebrow" style="color: #93C5FD;"><?php esc_html_e( 'OUR METHODOLOGY', 'bluewireseo' ); ?></p>
+                        <h1 class="bws-hero-title" style="color:#FFFFFF; font-size:clamp(2.25rem, 4.5vw, 3.5rem); line-height:1.15; margin-bottom:1rem;">
+                            <?php the_title(); ?>
+                        </h1>
+                        <p class="bws-hero-subtitle" style="color:rgba(255,255,255,0.85); font-size:1.125rem; line-height:1.65;">
+                            <?php esc_html_e( 'Our repeatable 4-step framework: Forensic Diagnostic, Technical Remediation, Semantic Clustering, and Compounding Authority Growth.', 'bluewireseo' ); ?>
                         </p>
                     </div>
                 </div>
             </div>
 
-            <!-- Process Steps Breakdown -->
-            <section class="bws-section-sm" style="background:var(--bws-white);">
+            <section class="bws-section" style="background:var(--bws-white); padding:4rem 0;">
                 <div class="bws-container">
                     <?php
-                    $content = get_the_content();
-                    if ( ! empty( $content ) && stripos( $content, 'This is the' ) === false ) :
-                        echo '<div class="bws-content" style="max-width:800px; margin-bottom:3rem;">';
+                    $raw_content = get_the_content();
+                    if ( ! empty( $raw_content ) && stripos( $raw_content, 'This is the' ) === false && strlen( trim( strip_tags( $raw_content ) ) ) > 15 ) :
+                        echo '<div class="bws-content" style="max-width:860px; margin-bottom:3rem; font-size:1.0625rem; line-height:1.75;">';
                         the_content();
                         echo '</div>';
                     endif;
                     ?>
 
-                    <div style="display:flex; flex-direction:column; gap:2.5rem; max-width:860px; margin:0 auto;">
-                        <!-- Step 1 -->
-                        <div class="bws-card" style="padding:2.5rem; border:1px solid var(--bws-border); border-radius:var(--bws-radius-lg); position:relative; overflow:hidden;">
-                            <div style="position:absolute; top:1.5rem; right:2rem; font-size:3.5rem; font-weight:900; color:rgba(37,99,235,0.08); line-height:1;">01</div>
-                            <span class="bws-card-tag tag-b2b" style="margin-bottom:1rem;"><?php esc_html_e( 'PHASE 1: WEEKS 1-2', 'bluewireseo' ); ?></span>
-                            <h2 style="font-size:1.5rem; margin-bottom:0.75rem;"><?php esc_html_e( 'Diagnostic & Architectural Audit', 'bluewireseo' ); ?></h2>
-                            <p style="color:var(--bws-text-secondary); line-height:1.7; margin-bottom:1.25rem;">
-                                <?php esc_html_e( 'We begin with a forensic examination of your domain’s health. We crawl every URL, analyze server log files to evaluate Googlebot behavior, assess Core Web Vitals performance, and uncover hidden canonical conflicts or redirect chains.', 'bluewireseo' ); ?>
+                    <div style="display:flex; flex-direction:column; gap:3rem; max-width:860px; margin:0 auto;">
+                        <div class="bws-card" style="padding:2.5rem; border:1px solid var(--bws-border); border-radius:var(--bws-radius-lg); position:relative;">
+                            <div style="font-size:2rem; font-weight:800; color:var(--bws-primary); margin-bottom:0.75rem;">Phase 01: Forensic Crawl & Semantic Diagnostic</div>
+                            <p style="font-size:1rem; color:var(--bws-text-secondary); line-height:1.7;">
+                                We conduct an exhaustive 20-point diagnostic analyzing server crawl logs, Google Search Console query distributions, Core Web Vitals performance, canonical loop integrity, and competitor entity gaps.
                             </p>
-                            <div style="padding:1rem 1.25rem; background:var(--bws-light-bg); border-radius:var(--bws-radius-md); font-size:0.875rem; color:var(--bws-text-secondary);">
-                                <strong><?php esc_html_e( 'Key Deliverables:', 'bluewireseo' ); ?></strong> <?php esc_html_e( 'Full Crawl Report, Canonical Audit, Entity Architecture Blueprint, Competitor Gap Matrix.', 'bluewireseo' ); ?>
-                            </div>
                         </div>
 
-                        <!-- Step 2 -->
-                        <div class="bws-card" style="padding:2.5rem; border:1px solid var(--bws-border); border-radius:var(--bws-radius-lg); position:relative; overflow:hidden;">
-                            <div style="position:absolute; top:1.5rem; right:2rem; font-size:3.5rem; font-weight:900; color:rgba(37,99,235,0.08); line-height:1;">02</div>
-                            <span class="bws-card-tag tag-b2b" style="margin-bottom:1rem;"><?php esc_html_e( 'PHASE 2: WEEKS 3-4', 'bluewireseo' ); ?></span>
-                            <h2 style="font-size:1.5rem; margin-bottom:0.75rem;"><?php esc_html_e( 'Technical Remediation & Indexation Control', 'bluewireseo' ); ?></h2>
-                            <p style="color:var(--bws-text-secondary); line-height:1.7; margin-bottom:1.25rem;">
-                                <?php esc_html_e( 'We fix the critical technical flaws discovered in Phase 1. We eliminate crawl traps, streamline XML sitemaps, implement advanced JSON-LD schema graphs, optimize mobile rendering, and resolve indexation bloat.', 'bluewireseo' ); ?>
+                        <div class="bws-card" style="padding:2.5rem; border:1px solid var(--bws-border); border-radius:var(--bws-radius-lg); position:relative;">
+                            <div style="font-size:2rem; font-weight:800; color:var(--bws-primary); margin-bottom:0.75rem;">Phase 02: Code-Level Technical Remediation</div>
+                            <p style="font-size:1rem; color:var(--bws-text-secondary); line-height:1.7;">
+                                We resolve 404/301 redirect chains, eliminate render-blocking assets, inject custom nested JSON-LD schema markup, and fix URL canonicalization to ensure 100% of priority commercial pages are crawled and indexed.
                             </p>
-                            <div style="padding:1rem 1.25rem; background:var(--bws-light-bg); border-radius:var(--bws-radius-md); font-size:0.875rem; color:var(--bws-text-secondary);">
-                                <strong><?php esc_html_e( 'Key Deliverables:', 'bluewireseo' ); ?></strong> <?php esc_html_e( 'Clean GSC Index Coverage, Validated Schema Graph, Optimized CWV Scores, Streamlined Robots.txt & XML.', 'bluewireseo' ); ?>
-                            </div>
                         </div>
 
-                        <!-- Step 3 -->
-                        <div class="bws-card" style="padding:2.5rem; border:1px solid var(--bws-border); border-radius:var(--bws-radius-lg); position:relative; overflow:hidden;">
-                            <div style="position:absolute; top:1.5rem; right:2rem; font-size:3.5rem; font-weight:900; color:rgba(37,99,235,0.08); line-height:1;">03</div>
-                            <span class="bws-card-tag tag-b2b" style="margin-bottom:1rem;"><?php esc_html_e( 'PHASE 3: MONTHS 2-3', 'bluewireseo' ); ?></span>
-                            <h2 style="font-size:1.5rem; margin-bottom:0.75rem;"><?php esc_html_e( 'Semantic Clustering & Topical Authority', 'bluewireseo' ); ?></h2>
-                            <p style="color:var(--bws-text-secondary); line-height:1.7; margin-bottom:1.25rem;">
-                                <?php esc_html_e( 'With technical foundations solidified, we build the content architecture. We establish pillar and cluster relationships, eliminating keyword cannibalization and targeting bottom-of-funnel decision-maker queries.', 'bluewireseo' ); ?>
+                        <div class="bws-card" style="padding:2.5rem; border:1px solid var(--bws-border); border-radius:var(--bws-radius-lg); position:relative;">
+                            <div style="font-size:2rem; font-weight:800; color:var(--bws-primary); margin-bottom:0.75rem;">Phase 03: Semantic Topic Clusters & City Hubs</div>
+                            <p style="font-size:1rem; color:var(--bws-text-secondary); line-height:1.7;">
+                                We architect intent-mapped content silos consisting of comprehensive pillar pages and supporting cluster articles that target decision-makers at every purchase stage.
                             </p>
-                            <div style="padding:1rem 1.25rem; background:var(--bws-light-bg); border-radius:var(--bws-radius-md); font-size:0.875rem; color:var(--bws-text-secondary);">
-                                <strong><?php esc_html_e( 'Key Deliverables:', 'bluewireseo' ); ?></strong> <?php esc_html_e( 'Topical Cluster Content, High-Intent Service Silos, Market Landing Page Architecture.', 'bluewireseo' ); ?>
-                            </div>
                         </div>
 
-                        <!-- Step 4 -->
-                        <div class="bws-card" style="padding:2.5rem; border:1px solid var(--bws-border); border-radius:var(--bws-radius-lg); position:relative; overflow:hidden;">
-                            <div style="position:absolute; top:1.5rem; right:2rem; font-size:3.5rem; font-weight:900; color:rgba(37,99,235,0.08); line-height:1;">04</div>
-                            <span class="bws-card-tag tag-b2b" style="margin-bottom:1rem;"><?php esc_html_e( 'PHASE 4: MONTHS 4+', 'bluewireseo' ); ?></span>
-                            <h2 style="font-size:1.5rem; margin-bottom:0.75rem;"><?php esc_html_e( 'Market Expansion & Compounding Growth', 'bluewireseo' ); ?></h2>
-                            <p style="color:var(--bws-text-secondary); line-height:1.7; margin-bottom:1.25rem;">
-                                <?php esc_html_e( 'Continuous expansion into secondary US metro markets, acquiring high-authority contextual editorial backlinks, and ongoing monitoring to safeguard rankings against core algorithm shifts.', 'bluewireseo' ); ?>
+                        <div class="bws-card" style="padding:2.5rem; border:1px solid var(--bws-border); border-radius:var(--bws-radius-lg); position:relative;">
+                            <div style="font-size:2rem; font-weight:800; color:var(--bws-primary); margin-bottom:0.75rem;">Phase 04: Compounding Authority & AI Overview Capture</div>
+                            <p style="font-size:1rem; color:var(--bws-text-secondary); line-height:1.7;">
+                                We secure contextual editorial backlinks, build high-tier PR citations, and continuously optimize for AI search engines (ChatGPT, Google AI Overviews, Gemini) to establish permanent market dominance.
                             </p>
-                            <div style="padding:1rem 1.25rem; background:var(--bws-light-bg); border-radius:var(--bws-radius-md); font-size:0.875rem; color:var(--bws-text-secondary);">
-                                <strong><?php esc_html_e( 'Key Deliverables:', 'bluewireseo' ); ?></strong> <?php esc_html_e( 'Multi-City Indexing, Tier-1 Backlink Profiles, Lead Attribution Dashboards, Monthly Strategic Reviews.', 'bluewireseo' ); ?>
-                            </div>
                         </div>
                     </div>
                 </div>
             </section>
 
             <?php get_template_part( 'template-parts/components/cta-section' ); ?>
+
             <?php
+            echo '<div class="bws-elementor-hook" style="display:none;" aria-hidden="true">';
+            the_content();
+            echo '</div>';
         }
     endwhile;
     ?>

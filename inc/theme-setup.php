@@ -192,16 +192,16 @@ function bluewireseo_default_navigation() {
     foreach ( $pages as $label => $url ) {
         $current = ( rtrim( $_SERVER['REQUEST_URI'] ?? '', '/' ) === rtrim( parse_url( $url, PHP_URL_PATH ), '/' ) ) ? 'current-menu-item' : '';
         if ( 'Services' === $label ) {
-            echo '<li class="bws-nav-item ' . esc_attr( $current ) . '">';
-            echo '<span>' . esc_html( $label );
-            echo '<svg class="dropdown-arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>';
-            echo '</span>';
-            echo '<div class="bws-dropdown">';
-            echo '<a href="' . esc_url( home_url( '/services/seo/' ) ) . '">SEO Service</a>';
-            echo '<a href="' . esc_url( home_url( '/services/seo-audit/' ) ) . '">SEO Audit</a>';
-            echo '<a href="' . esc_url( home_url( '/services/semantic-seo/' ) ) . '">Semantic SEO</a>';
-            echo '<a href="' . esc_url( home_url( '/services/ooh-seo/' ) ) . '">OOH SEO</a>';
-            echo '</div>';
+            echo '<li class="bws-nav-item menu-item-has-children ' . esc_attr( $current ) . '">';
+            echo '<a href="' . esc_url( $url ) . '">' . esc_html( $label );
+            echo '<svg class="dropdown-arrow" xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:12px;height:12px;max-width:12px;max-height:12px;margin-left:4px;flex-shrink:0;"><polyline points="6 9 12 15 18 9"></polyline></svg>';
+            echo '</a>';
+            echo '<ul class="sub-menu bws-dropdown">';
+            echo '<li><a href="' . esc_url( home_url( '/services/seo/' ) ) . '">SEO Service</a></li>';
+            echo '<li><a href="' . esc_url( home_url( '/services/seo-audit/' ) ) . '">SEO Audit</a></li>';
+            echo '<li><a href="' . esc_url( home_url( '/services/semantic-seo/' ) ) . '">Semantic SEO</a></li>';
+            echo '<li><a href="' . esc_url( home_url( '/services/ooh-seo/' ) ) . '">OOH SEO</a></li>';
+            echo '</ul>';
             echo '</li>';
         } else {
             echo '<li class="bws-nav-item ' . esc_attr( $current ) . '">';

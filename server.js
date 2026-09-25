@@ -15,10 +15,19 @@ if (!fs.existsSync(path.join(__dirname, 'bluewireseo.zip'))) {
   }
 }
 
+// Explicit zip download endpoints with Content-Disposition attachment
+app.get('/bluewireseo.zip', (req, res) => {
+  const zipPath = path.join(__dirname, 'bluewireseo.zip');
+  res.download(zipPath, 'bluewireseo.zip');
+});
+app.get('/download', (req, res) => {
+  const zipPath = path.join(__dirname, 'bluewireseo.zip');
+  res.download(zipPath, 'bluewireseo.zip');
+});
+
 // Serve static assets
 app.use('/assets', express.static(path.join(__dirname, 'assets')));
 app.use('/style.css', express.static(path.join(__dirname, 'style.css')));
-app.use('/bluewireseo.zip', express.static(path.join(__dirname, 'bluewireseo.zip')));
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Helper to wrap pages with the top preview bar and theme header/footer

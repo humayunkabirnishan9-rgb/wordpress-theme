@@ -1,7 +1,7 @@
 <?php
 /**
  * Single Service Template
- * BlueWireSEO — Service Template
+ * BlueWireSEO — Service Template with Full Elementor Support
  *
  * @package BlueWireSEO
  */
@@ -14,88 +14,82 @@ get_header();
     while ( have_posts() ) :
         the_post();
 
-        $elementor_data = get_post_meta( get_the_ID(), '_elementor_data', true );
-        $elementor_edit_mode = get_post_meta( get_the_ID(), '_elementor_edit_mode', true );
-
-        if ( ! empty( $elementor_data ) && 'builder' === $elementor_edit_mode ) {
+        if ( bluewireseo_is_elementor_active( get_the_ID() ) ) {
+            echo '<div class="bws-elementor-container">';
             the_content();
+            echo '</div>';
         } else {
             $cat_label = get_post_meta( get_the_ID(), '_bws_service_category_label', true );
             $cta_text  = get_post_meta( get_the_ID(), '_bws_service_cta_text', true );
             $cta_url   = get_post_meta( get_the_ID(), '_bws_service_cta_url', true );
-            if ( ! $cta_url ) $cta_url = bluewireseo_get_audit_url();
             if ( ! $cta_text ) $cta_text = __( 'Get Free Audit', 'bluewireseo' );
+            if ( ! $cta_url ) $cta_url = bluewireseo_get_audit_url();
             ?>
 
-            <!-- Service Hero -->
-            <div class="bws-page-hero" style="background:var(--bws-light-bg);border-bottom:1px solid var(--bws-border);padding:3rem 0 2.5rem;">
+            <div class="bws-page-hero" style="background: linear-gradient(135deg, #0F1B3D 0%, #16244C 50%, #1E2D5A 100%); color:#FFFFFF; padding: 4.5rem 0 3.5rem;">
                 <div class="bws-container">
                     <?php echo bluewireseo_breadcrumb(); // phpcs:ignore WordPress.Security.EscapeOutput ?>
-                    <div style="max-width:700px;margin-top:1.25rem;">
+                    <div style="margin-top:1.25rem;">
                         <?php if ( $cat_label ) : ?>
-                            <p class="bws-eyebrow" style="margin-bottom:0.75rem;"><?php echo esc_html( $cat_label ); ?></p>
+                            <span class="bws-card-tag" style="background:rgba(37,99,235,0.25); color:#93C5FD; border:1px solid rgba(147,197,253,0.3); font-size:0.75rem;">
+                                <?php echo esc_html( strtoupper( $cat_label ) ); ?>
+                            </span>
                         <?php endif; ?>
-                        <h1 class="bws-hero-title" style="font-size:clamp(2rem,4.5vw,3.25rem);margin-bottom:1rem;"><?php the_title(); ?></h1>
-                        <div class="bws-hero-subtitle">
-                            <?php echo wp_kses_post( get_the_excerpt() ); ?>
-                        </div>
-                        <div class="bws-hero-actions" style="margin-top:1.75rem;">
-                            <a href="<?php echo esc_url( $cta_url ); ?>" class="bws-btn bws-btn-primary bws-btn-lg">
-                                <?php echo esc_html( $cta_text ); ?>
-                            </a>
-                            <a href="<?php echo esc_url( bluewireseo_get_call_url() ); ?>" class="bws-btn bws-btn-outline bws-btn-lg">
-                                <?php esc_html_e( 'Book a 30-min Call', 'bluewireseo' ); ?>
-                            </a>
-                        </div>
+                        <h1 class="bws-hero-title" style="color:#FFFFFF; font-size:clamp(2.25rem,4.5vw,3.25rem); margin:0.75rem 0 1rem;">
+                            <?php the_title(); ?>
+                        </h1>
+                        <p class="bws-hero-subtitle" style="color:rgba(255,255,255,0.85); font-size:1.125rem; line-height:1.65; max-width:720px;">
+                            <?php echo esc_html( get_the_excerpt() ); ?>
+                        </p>
                     </div>
                 </div>
             </div>
 
-            <!-- Service Content -->
-            <section class="bws-section-sm">
+            <section class="bws-section-sm" style="background:var(--bws-white); padding:3.5rem 0;">
                 <div class="bws-container">
-                    <?php if ( get_the_content() ) : ?>
-                        <div class="bws-content" style="max-width:800px;">
-                            <?php the_content(); ?>
-                        </div>
-                    <?php else : ?>
-                        <!-- Editable placeholder structure -->
-                        <div style="padding:3rem;text-align:center;border:2px dashed var(--bws-border);border-radius:var(--bws-radius-lg);">
-                            <h2 style="font-size:1.125rem;color:var(--bws-text-muted);font-weight:500;margin-bottom:0.5rem;">
-                                <?php esc_html_e( 'BlueWireSEO — Service Template', 'bluewireseo' ); ?>
-                            </h2>
-                            <p style="color:var(--bws-text-light);font-size:0.9rem;">
-                                <?php esc_html_e( 'Click "Edit with Elementor" to build this service page. Add your service content, benefits, pricing, and FAQs.', 'bluewireseo' ); ?>
-                            </p>
-                        </div>
-                    <?php endif; ?>
+                    <div class="bws-single-layout" style="display:grid; grid-template-columns: 2.2fr 1fr; gap:3rem;">
+                        <article class="bws-content" style="font-size:1.0625rem; line-height:1.75;">
+                            <?php
+                            $raw_content = get_the_content();
+                            if ( ! empty( $raw_content ) && strlen( trim( strip_tags( $raw_content ) ) ) > 20 ) {
+                                the_content();
+                            } else {
+                                ?>
+                                <div style="margin-bottom:2.5rem;">
+                                    <h2><?php esc_html_e( 'How This Service Solves Commercial Search Growth', 'bluewireseo' ); ?></h2>
+                                    <p>
+                                        <?php esc_html_e( 'Most SEO services focus on vanity metrics. BlueWireSEO focuses exclusively on high-intent buyer queries, topical entity graphs, and eliminating crawl bottlenecks so your website converts organic search traffic into paying customers.', 'bluewireseo' ); ?>
+                                    </p>
+                                    <h3><?php esc_html_e( 'What We Deliver:', 'bluewireseo' ); ?></h3>
+                                    <ul>
+                                        <li><?php esc_html_e( 'Forensic code and crawl audit to eliminate indexing blockers', 'bluewireseo' ); ?></li>
+                                        <li><?php esc_html_e( 'Intent-mapped content architecture designed for commercial buyers', 'bluewireseo' ); ?></li>
+                                        <li><?php esc_html_e( 'Verified Google Knowledge Graph schema and entity connections', 'bluewireseo' ); ?></li>
+                                        <li><?php esc_html_e( 'Continuous search console monitoring and ranking protection', 'bluewireseo' ); ?></li>
+                                    </ul>
+                                </div>
+                                <?php
+                                echo '<div class="bws-elementor-hook" style="display:none;" aria-hidden="true">';
+                                the_content();
+                                echo '</div>';
+                            }
+                            ?>
+                        </article>
+
+                        <aside class="bws-single-sidebar">
+                            <div class="bws-card" style="padding:1.75rem; background:linear-gradient(135deg,#0F1B3D,#16244C); color:#FFFFFF; border:none; margin-bottom:1.5rem;">
+                                <h3 style="font-size:1.125rem; color:#FFFFFF; margin-bottom:0.75rem;"><?php esc_html_e( 'Request Free Audit', 'bluewireseo' ); ?></h3>
+                                <p style="font-size:0.875rem; color:rgba(255,255,255,0.75); margin-bottom:1.25rem; line-height:1.5;">
+                                    <?php esc_html_e( 'Get an expert 20-point diagnostic on how to optimize this service area for your business.', 'bluewireseo' ); ?>
+                                </p>
+                                <a href="<?php echo esc_url( $cta_url ); ?>" class="bws-btn bws-btn-primary" style="width:100%; justify-content:center;">
+                                    <?php echo esc_html( $cta_text ); ?>
+                                </a>
+                            </div>
+                        </aside>
+                    </div>
                 </div>
             </section>
-
-            <!-- Related Case Studies -->
-            <?php
-            $related = new WP_Query( array(
-                'post_type'      => 'bws_case_study',
-                'posts_per_page' => 3,
-                'post_status'    => 'publish',
-            ) );
-
-            if ( $related->have_posts() ) :
-                ?>
-                <section class="bws-section-sm" style="background:var(--bws-light-bg);">
-                    <div class="bws-container">
-                        <h2 style="margin-bottom:2rem;font-size:1.875rem;"><?php esc_html_e( 'Related Case Studies', 'bluewireseo' ); ?></h2>
-                        <div class="bws-grid-3">
-                            <?php while ( $related->have_posts() ) : $related->the_post(); ?>
-                                <?php echo bluewireseo_case_study_card( get_the_ID() ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
-                            <?php endwhile; ?>
-                        </div>
-                    </div>
-                </section>
-                <?php
-                wp_reset_postdata();
-            endif;
-            ?>
 
             <?php get_template_part( 'template-parts/components/cta-section' ); ?>
 
