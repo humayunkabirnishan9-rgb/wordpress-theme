@@ -670,7 +670,7 @@ function bluewireseo_import_demo_content() {
     set_theme_mod( 'bws_audit_url', home_url( '/free-seo-audit/' ) );
     set_theme_mod( 'bws_call_url', home_url( '/contact/' ) );
     set_theme_mod( 'bws_contact_url', home_url( '/contact/' ) );
-    set_theme_mod( 'bws_footer_desc', 'Semantic SEO and technical SEO agency serving US businesses. Remote-first, serving commercial clients nationwide.' );
+    set_theme_mod( 'bws_footer_desc', 'Semantic SEO and technical SEO agency engineered for high-growth commercial enterprises. Delivering verified, data-backed organic revenue across US markets.' );
 
     // 11. Flush rewrite rules
     bluewireseo_flush_rewrite_rules();
@@ -682,130 +682,225 @@ function bluewireseo_import_demo_content() {
 }
 
 /**
- * Configure Default Menus
+ * Configure Default Menus (Primary and Footer Locations)
  */
 function bluewireseo_setup_default_menus( $page_ids ) {
-    $menu_name = 'Primary Navigation';
+    $locations = get_theme_mod( 'nav_menu_locations', array() );
+
+    // 1. PRIMARY NAVIGATION
+    $menu_name   = 'Primary Navigation';
     $menu_exists = wp_get_nav_menu_object( $menu_name );
+    $menu_id     = $menu_exists ? $menu_exists->term_id : 0;
+
+    // If menu exists, check if items are complete
+    $existing_items = $menu_id ? wp_get_nav_menu_items( $menu_id ) : array();
+    $rebuild_primary = empty( $existing_items ) || count( $existing_items ) < 5;
 
     if ( ! $menu_exists ) {
         $menu_id = wp_create_nav_menu( $menu_name );
+        $rebuild_primary = true;
+    }
 
-        if ( ! is_wp_error( $menu_id ) ) {
-            // Home
-            if ( ! empty( $page_ids['home'] ) ) {
+    if ( $rebuild_primary && $menu_id && ! is_wp_error( $menu_id ) ) {
+        // Clear any broken partial items
+        if ( ! empty( $existing_items ) ) {
+            foreach ( $existing_items as $ei ) {
+                wp_delete_post( $ei->ID, true );
+            }
+        }
+
+        // Home
+        wp_update_nav_menu_item( $menu_id, 0, array(
+            'menu-item-title'  => __( 'Home', 'bluewireseo' ),
+            'menu-item-url'    => home_url( '/' ),
+            'menu-item-type'   => 'custom',
+            'menu-item-status' => 'publish',
+        ) );
+
+        // Services (Parent with dropdown)
+        $services_parent_id = wp_update_nav_menu_item( $menu_id, 0, array(
+            'menu-item-title'  => __( 'Services', 'bluewireseo' ),
+            'menu-item-url'    => home_url( '/services/' ),
+            'menu-item-type'   => 'custom',
+            'menu-item-status' => 'publish',
+        ) );
+
+        if ( $services_parent_id && ! is_wp_error( $services_parent_id ) ) {
+            $services_sub = array(
+                'Semantic SEO'          => home_url( '/services/semantic-seo/' ),
+                'Technical SEO'         => home_url( '/services/technical-seo/' ),
+                'Local SEO & GBP'       => home_url( '/services/local-seo/' ),
+                'SEO Audit'             => home_url( '/services/seo-audit/' ),
+                'Content & Entity SEO'  => home_url( '/services/content-entity-seo/' ),
+                'Link Building'         => home_url( '/services/link-building/' ),
+            );
+            foreach ( $services_sub as $title => $url ) {
                 wp_update_nav_menu_item( $menu_id, 0, array(
-                    'menu-item-title'     => __( 'Home', 'bluewireseo' ),
-                    'menu-item-object'    => 'page',
-                    'menu-item-object-id' => $page_ids['home'],
-                    'menu-item-type'      => 'post_type',
+                    'menu-item-title'     => $title,
+                    'menu-item-url'       => $url,
+                    'menu-item-type'      => 'custom',
                     'menu-item-status'    => 'publish',
+                    'menu-item-parent-id' => $services_parent_id,
                 ) );
             }
+        }
 
-            // Services (with dropdown)
-            $services_parent_id = 0;
-            if ( ! empty( $page_ids['services'] ) ) {
-                $services_parent_id = wp_update_nav_menu_item( $menu_id, 0, array(
-                    'menu-item-title'     => __( 'Services', 'bluewireseo' ),
-                    'menu-item-object'    => 'page',
-                    'menu-item-object-id' => $page_ids['services'],
-                    'menu-item-type'      => 'post_type',
-                    'menu-item-status'    => 'publish',
-                ) );
-            }
+        // Industries (Parent with dropdown)
+        $ind_parent_id = wp_update_nav_menu_item( $menu_id, 0, array(
+            'menu-item-title'  => __( 'Industries', 'bluewireseo' ),
+            'menu-item-url'    => home_url( '/industries/' ),
+            'menu-item-type'   => 'custom',
+            'menu-item-status' => 'publish',
+        ) );
 
-            // Services Submenu Items
-            if ( $services_parent_id ) {
-                $sub_items = array(
-                    'Semantic SEO'     => home_url( '/services/semantic-seo/' ),
-                    'Technical SEO'    => home_url( '/services/technical-seo/' ),
-                    'Local SEO & GBP'  => home_url( '/services/local-seo/' ),
-                    'SEO Audit'        => home_url( '/services/seo-audit/' ),
-                );
-                foreach ( $sub_items as $sub_title => $sub_url ) {
-                    wp_update_nav_menu_item( $menu_id, 0, array(
-                        'menu-item-title'     => $sub_title,
-                        'menu-item-url'       => $sub_url,
-                        'menu-item-type'      => 'custom',
-                        'menu-item-status'    => 'publish',
-                        'menu-item-parent-id' => $services_parent_id,
-                    ) );
-                }
-            }
-
-            // Industries
-            if ( ! empty( $page_ids['industries'] ) ) {
+        if ( $ind_parent_id && ! is_wp_error( $ind_parent_id ) ) {
+            $ind_sub = array(
+                'OOH & Billboard SEO'    => home_url( '/industries/ooh-billboard/' ),
+                'Multi-Site & Portfolio' => home_url( '/industries/multi-site-portfolio/' ),
+                'B2B Service Businesses' => home_url( '/industries/b2b-service-business/' ),
+                'All Industries'         => home_url( '/industries/' ),
+            );
+            foreach ( $ind_sub as $title => $url ) {
                 wp_update_nav_menu_item( $menu_id, 0, array(
-                    'menu-item-title'     => __( 'Industries', 'bluewireseo' ),
-                    'menu-item-object'    => 'page',
-                    'menu-item-object-id' => $page_ids['industries'],
-                    'menu-item-type'      => 'post_type',
+                    'menu-item-title'     => $title,
+                    'menu-item-url'       => $url,
+                    'menu-item-type'      => 'custom',
                     'menu-item-status'    => 'publish',
+                    'menu-item-parent-id' => $ind_parent_id,
                 ) );
             }
+        }
 
-            // Case Studies
-            if ( ! empty( $page_ids['case-studies'] ) ) {
-                wp_update_nav_menu_item( $menu_id, 0, array(
-                    'menu-item-title'     => __( 'Case Studies', 'bluewireseo' ),
-                    'menu-item-object'    => 'page',
-                    'menu-item-object-id' => $page_ids['case-studies'],
-                    'menu-item-type'      => 'post_type',
-                    'menu-item-status'    => 'publish',
-                ) );
+        // Case Studies
+        wp_update_nav_menu_item( $menu_id, 0, array(
+            'menu-item-title'  => __( 'Case Studies', 'bluewireseo' ),
+            'menu-item-url'    => home_url( '/case-studies/' ),
+            'menu-item-type'   => 'custom',
+            'menu-item-status' => 'publish',
+        ) );
+
+        // Portfolio
+        wp_update_nav_menu_item( $menu_id, 0, array(
+            'menu-item-title'  => __( 'Portfolio', 'bluewireseo' ),
+            'menu-item-url'    => home_url( '/portfolio/' ),
+            'menu-item-type'   => 'custom',
+            'menu-item-status' => 'publish',
+        ) );
+
+        // Process
+        wp_update_nav_menu_item( $menu_id, 0, array(
+            'menu-item-title'  => __( 'Process', 'bluewireseo' ),
+            'menu-item-url'    => home_url( '/process/' ),
+            'menu-item-type'   => 'custom',
+            'menu-item-status' => 'publish',
+        ) );
+
+        // About
+        wp_update_nav_menu_item( $menu_id, 0, array(
+            'menu-item-title'  => __( 'About', 'bluewireseo' ),
+            'menu-item-url'    => home_url( '/about/' ),
+            'menu-item-type'   => 'custom',
+            'menu-item-status' => 'publish',
+        ) );
+
+        // Blog
+        wp_update_nav_menu_item( $menu_id, 0, array(
+            'menu-item-title'  => __( 'Blog', 'bluewireseo' ),
+            'menu-item-url'    => home_url( '/blog/' ),
+            'menu-item-type'   => 'custom',
+            'menu-item-status' => 'publish',
+        ) );
+    }
+
+    if ( $menu_id && ! is_wp_error( $menu_id ) ) {
+        $locations['primary'] = $menu_id;
+    }
+
+    // 2. FOOTER MENUS
+    // Footer: Services
+    $f1_name   = 'Footer: Services';
+    $f1_exists = wp_get_nav_menu_object( $f1_name );
+    $f1_id     = $f1_exists ? $f1_exists->term_id : wp_create_nav_menu( $f1_name );
+    if ( $f1_id && ! is_wp_error( $f1_id ) ) {
+        $locations['footer-1'] = $f1_id;
+        $items = wp_get_nav_menu_items( $f1_id );
+        if ( empty( $items ) ) {
+            $f1_links = array(
+                'Semantic SEO'         => home_url( '/services/semantic-seo/' ),
+                'Technical SEO'        => home_url( '/services/technical-seo/' ),
+                'Local SEO & GBP'      => home_url( '/services/local-seo/' ),
+                'SEO Audit'            => home_url( '/services/seo-audit/' ),
+                'Content & Entity SEO' => home_url( '/services/content-entity-seo/' ),
+                'Link Building'        => home_url( '/services/link-building/' ),
+            );
+            foreach ( $f1_links as $t => $u ) {
+                wp_update_nav_menu_item( $f1_id, 0, array( 'menu-item-title' => $t, 'menu-item-url' => $u, 'menu-item-type' => 'custom', 'menu-item-status' => 'publish' ) );
             }
-
-            // Portfolio
-            if ( ! empty( $page_ids['portfolio'] ) ) {
-                wp_update_nav_menu_item( $menu_id, 0, array(
-                    'menu-item-title'     => __( 'Portfolio', 'bluewireseo' ),
-                    'menu-item-object'    => 'page',
-                    'menu-item-object-id' => $page_ids['portfolio'],
-                    'menu-item-type'      => 'post_type',
-                    'menu-item-status'    => 'publish',
-                ) );
-            }
-
-            // Process
-            if ( ! empty( $page_ids['process'] ) ) {
-                wp_update_nav_menu_item( $menu_id, 0, array(
-                    'menu-item-title'     => __( 'Process', 'bluewireseo' ),
-                    'menu-item-object'    => 'page',
-                    'menu-item-object-id' => $page_ids['process'],
-                    'menu-item-type'      => 'post_type',
-                    'menu-item-status'    => 'publish',
-                ) );
-            }
-
-            // About
-            if ( ! empty( $page_ids['about'] ) ) {
-                wp_update_nav_menu_item( $menu_id, 0, array(
-                    'menu-item-title'     => __( 'About', 'bluewireseo' ),
-                    'menu-item-object'    => 'page',
-                    'menu-item-object-id' => $page_ids['about'],
-                    'menu-item-type'      => 'post_type',
-                    'menu-item-status'    => 'publish',
-                ) );
-            }
-
-            // Blog
-            if ( ! empty( $page_ids['blog'] ) ) {
-                wp_update_nav_menu_item( $menu_id, 0, array(
-                    'menu-item-title'     => __( 'Blog', 'bluewireseo' ),
-                    'menu-item-object'    => 'page',
-                    'menu-item-object-id' => $page_ids['blog'],
-                    'menu-item-type'      => 'post_type',
-                    'menu-item-status'    => 'publish',
-                ) );
-            }
-
-            // Assign Primary menu to location
-            $locations = get_theme_mod( 'nav_menu_locations', array() );
-            $locations['primary'] = $menu_id;
-            set_theme_mod( 'nav_menu_locations', $locations );
         }
     }
+
+    // Footer: Industries
+    $f2_name   = 'Footer: Industries';
+    $f2_exists = wp_get_nav_menu_object( $f2_name );
+    $f2_id     = $f2_exists ? $f2_exists->term_id : wp_create_nav_menu( $f2_name );
+    if ( $f2_id && ! is_wp_error( $f2_id ) ) {
+        $locations['footer-2'] = $f2_id;
+        $items = wp_get_nav_menu_items( $f2_id );
+        if ( empty( $items ) ) {
+            $f2_links = array(
+                'OOH & Billboard SEO'    => home_url( '/industries/ooh-billboard/' ),
+                'Multi-Site & Portfolio' => home_url( '/industries/multi-site-portfolio/' ),
+                'B2B Service Businesses' => home_url( '/industries/b2b-service-business/' ),
+                'All Industries'         => home_url( '/industries/' ),
+            );
+            foreach ( $f2_links as $t => $u ) {
+                wp_update_nav_menu_item( $f2_id, 0, array( 'menu-item-title' => $t, 'menu-item-url' => $u, 'menu-item-type' => 'custom', 'menu-item-status' => 'publish' ) );
+            }
+        }
+    }
+
+    // Footer: Company
+    $f3_name   = 'Footer: Company';
+    $f3_exists = wp_get_nav_menu_object( $f3_name );
+    $f3_id     = $f3_exists ? $f3_exists->term_id : wp_create_nav_menu( $f3_name );
+    if ( $f3_id && ! is_wp_error( $f3_id ) ) {
+        $locations['footer-3'] = $f3_id;
+        $items = wp_get_nav_menu_items( $f3_id );
+        if ( empty( $items ) ) {
+            $f3_links = array(
+                'About BlueWireSEO' => home_url( '/about/' ),
+                'Process Framework' => home_url( '/process/' ),
+                'Case Studies'      => home_url( '/case-studies/' ),
+                'Portfolio'         => home_url( '/portfolio/' ),
+                'Contact'           => home_url( '/contact/' ),
+            );
+            foreach ( $f3_links as $t => $u ) {
+                wp_update_nav_menu_item( $f3_id, 0, array( 'menu-item-title' => $t, 'menu-item-url' => $u, 'menu-item-type' => 'custom', 'menu-item-status' => 'publish' ) );
+            }
+        }
+    }
+
+    // Footer: Resources
+    $f4_name   = 'Footer: Resources';
+    $f4_exists = wp_get_nav_menu_object( $f4_name );
+    $f4_id     = $f4_exists ? $f4_exists->term_id : wp_create_nav_menu( $f4_name );
+    if ( $f4_id && ! is_wp_error( $f4_id ) ) {
+        $locations['footer-4'] = $f4_id;
+        $items = wp_get_nav_menu_items( $f4_id );
+        if ( empty( $items ) ) {
+            $f4_links = array(
+                'Blog & Insights'  => home_url( '/blog/' ),
+                'Free SEO Audit'   => home_url( '/free-seo-audit/' ),
+                'Privacy Policy'   => home_url( '/privacy-policy/' ),
+                'Terms of Service' => home_url( '/terms-of-service/' ),
+            );
+            foreach ( $f4_links as $t => $u ) {
+                wp_update_nav_menu_item( $f4_id, 0, array( 'menu-item-title' => $t, 'menu-item-url' => $u, 'menu-item-type' => 'custom', 'menu-item-status' => 'publish' ) );
+            }
+        }
+    }
+
+    set_theme_mod( 'nav_menu_locations', $locations );
 }
 
 /**

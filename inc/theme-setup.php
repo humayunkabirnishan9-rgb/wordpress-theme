@@ -197,10 +197,24 @@ function bluewireseo_default_navigation() {
             echo '<svg class="dropdown-arrow" xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:12px;height:12px;max-width:12px;max-height:12px;margin-left:4px;flex-shrink:0;"><polyline points="6 9 12 15 18 9"></polyline></svg>';
             echo '</a>';
             echo '<ul class="sub-menu bws-dropdown">';
-            echo '<li><a href="' . esc_url( home_url( '/services/seo/' ) ) . '">SEO Service</a></li>';
-            echo '<li><a href="' . esc_url( home_url( '/services/seo-audit/' ) ) . '">SEO Audit</a></li>';
-            echo '<li><a href="' . esc_url( home_url( '/services/semantic-seo/' ) ) . '">Semantic SEO</a></li>';
-            echo '<li><a href="' . esc_url( home_url( '/services/ooh-seo/' ) ) . '">OOH SEO</a></li>';
+            echo '<li><a href="' . esc_url( home_url( '/services/semantic-seo/' ) ) . '">' . esc_html__( 'Semantic SEO', 'bluewireseo' ) . '</a></li>';
+            echo '<li><a href="' . esc_url( home_url( '/services/technical-seo/' ) ) . '">' . esc_html__( 'Technical SEO', 'bluewireseo' ) . '</a></li>';
+            echo '<li><a href="' . esc_url( home_url( '/services/local-seo/' ) ) . '">' . esc_html__( 'Local SEO & GBP', 'bluewireseo' ) . '</a></li>';
+            echo '<li><a href="' . esc_url( home_url( '/services/seo-audit/' ) ) . '">' . esc_html__( 'SEO Audit', 'bluewireseo' ) . '</a></li>';
+            echo '<li><a href="' . esc_url( home_url( '/services/content-entity-seo/' ) ) . '">' . esc_html__( 'Content & Entity SEO', 'bluewireseo' ) . '</a></li>';
+            echo '<li><a href="' . esc_url( home_url( '/services/link-building/' ) ) . '">' . esc_html__( 'Link Building', 'bluewireseo' ) . '</a></li>';
+            echo '</ul>';
+            echo '</li>';
+        } elseif ( 'Industries' === $label ) {
+            echo '<li class="bws-nav-item menu-item-has-children ' . esc_attr( $current ) . '">';
+            echo '<a href="' . esc_url( $url ) . '">' . esc_html( $label );
+            echo '<svg class="dropdown-arrow" xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:12px;height:12px;max-width:12px;max-height:12px;margin-left:4px;flex-shrink:0;"><polyline points="6 9 12 15 18 9"></polyline></svg>';
+            echo '</a>';
+            echo '<ul class="sub-menu bws-dropdown">';
+            echo '<li><a href="' . esc_url( home_url( '/industries/ooh-billboard/' ) ) . '">' . esc_html__( 'OOH & Billboard SEO', 'bluewireseo' ) . '</a></li>';
+            echo '<li><a href="' . esc_url( home_url( '/industries/multi-site-portfolio/' ) ) . '">' . esc_html__( 'Multi-Site & Portfolio', 'bluewireseo' ) . '</a></li>';
+            echo '<li><a href="' . esc_url( home_url( '/industries/b2b-service-business/' ) ) . '">' . esc_html__( 'B2B Service Businesses', 'bluewireseo' ) . '</a></li>';
+            echo '<li><a href="' . esc_url( home_url( '/industries/' ) ) . '">' . esc_html__( 'All Industries', 'bluewireseo' ) . '</a></li>';
             echo '</ul>';
             echo '</li>';
         } else {

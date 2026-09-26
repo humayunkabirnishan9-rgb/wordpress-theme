@@ -53,8 +53,8 @@ $contact_url = bluewireseo_get_contact_url();
                     <div style="color: rgba(255,255,255,0.65); font-size: 0.8125rem; line-height: 1.4;"><?php esc_html_e( 'Specialized market architecture', 'bluewireseo' ); ?></div>
                 </div>
                 <div>
-                    <div style="color: #60A5FA; font-weight: 700; font-size: 1.25rem; margin-bottom: 0.25rem;">Remote-First</div>
-                    <div style="color: rgba(255,255,255,0.65); font-size: 0.8125rem; line-height: 1.4;"><?php esc_html_e( 'Serving US commercial clients', 'bluewireseo' ); ?></div>
+                    <div style="color: #60A5FA; font-weight: 700; font-size: 1.25rem; margin-bottom: 0.25rem;">US Enterprise Focus</div>
+                    <div style="color: rgba(255,255,255,0.65); font-size: 0.8125rem; line-height: 1.4;"><?php esc_html_e( 'Commercial B2B & multi-market brands', 'bluewireseo' ); ?></div>
                 </div>
                 <div>
                     <div style="color: #60A5FA; font-weight: 700; font-size: 1.25rem; margin-bottom: 0.25rem;">Zero Generic Retainers</div>
@@ -479,7 +479,7 @@ $contact_url = bluewireseo_get_contact_url();
                 <?php esc_html_e( 'Built for technical precision and commercial outcomes.', 'bluewireseo' ); ?>
             </h2>
             <p style="color: rgba(255,255,255,0.8); font-size: 1.0625rem; line-height: 1.7;">
-                <?php esc_html_e( 'BlueWireSEO is an agile, remote-first technical SEO agency serving commercial US businesses. You work directly with technical specialists who understand how search crawlers actually operate.', 'bluewireseo' ); ?>
+                <?php esc_html_e( 'BlueWireSEO is an agile technical SEO agency serving commercial US businesses nationwide. You work directly with senior technical specialists who understand how search crawlers actually operate.', 'bluewireseo' ); ?>
             </p>
         </div>
 

@@ -51,13 +51,13 @@ $phone       = bluewireseo_get_phone();
                                     HKN
                                 </div>
                                 <h2 style="color:#FFFFFF; font-size:1.75rem; margin-bottom:0.35rem;">Humayun Kabir Nishan</h2>
-                                <p style="color:#93C5FD; font-size:1rem; font-weight:600; margin-bottom:1.25rem;"><?php esc_html_e( 'Lead SEO Strategist & Technical Architect', 'bluewireseo' ); ?></p>
+                                <p style="color:#93C5FD; font-size:1rem; font-weight:600; margin-bottom:1.25rem;"><?php esc_html_e( 'Founder & Principal SEO Architect', 'bluewireseo' ); ?></p>
                                 <p style="color:rgba(255,255,255,0.8); font-size:0.9rem; line-height:1.6; margin-bottom:1.75rem;">
-                                    <?php esc_html_e( 'Specializing in Technical, Semantic, and Local SEO for US-based OOH, airport assistance, automotive, and B2B clients.', 'bluewireseo' ); ?>
+                                    <?php esc_html_e( 'Specializing in Technical, Semantic, and Local SEO for US-based OOH, airport assistance, automotive, and commercial enterprise clients.', 'bluewireseo' ); ?>
                                 </p>
                                 <div style="display:flex; justify-content:center; gap:0.75rem; flex-wrap:wrap;">
-                                    <a href="mailto:<?php echo esc_attr( $email ); ?>" class="bws-btn bws-btn-primary bws-btn-sm">
-                                        <?php esc_html_e( 'Email Nishan', 'bluewireseo' ); ?>
+                                    <a href="<?php echo esc_url( home_url( '/contact/' ) ); ?>" class="bws-btn bws-btn-primary bws-btn-sm">
+                                        <?php esc_html_e( 'Contact Our Team', 'bluewireseo' ); ?>
                                     </a>
                                     <a href="<?php echo esc_url( 'https://linkedin.com/in/humayun-kabir-nishan' ); ?>" target="_blank" rel="noopener noreferrer" class="bws-btn bws-btn-outline" style="border-color:rgba(255,255,255,0.4); color:#FFFFFF;">
                                         <?php esc_html_e( 'LinkedIn Profile', 'bluewireseo' ); ?>

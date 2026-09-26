@@ -357,8 +357,8 @@ function bluewireseo_register_meta_boxes() {
         'high'
     );
 
-    // Header & Hero settings for Pages, Services, and Industries
-    $hero_post_types = array( 'page', 'bws_service', 'bws_industry' );
+    // Header & Hero settings for Pages, Services, Industries, Case Studies, and Portfolio
+    $hero_post_types = array( 'page', 'bws_service', 'bws_industry', 'bws_case_study', 'bws_portfolio' );
     foreach ( $hero_post_types as $pt ) {
         add_meta_box(
             'bws_page_hero_details',

@@ -320,7 +320,7 @@ function bluewireseo_get_copyright() {
  * Get footer description
  */
 function bluewireseo_get_footer_desc() {
-    return get_theme_mod( 'bws_footer_desc', 'Semantic SEO and technical SEO agency serving US businesses. Bangladesh (remote-first, serving US businesses).' );
+    return get_theme_mod( 'bws_footer_desc', 'Semantic SEO and technical SEO agency engineered for high-growth commercial enterprises. Delivering verified, data-backed organic revenue across US markets.' );
 }
 
 /**

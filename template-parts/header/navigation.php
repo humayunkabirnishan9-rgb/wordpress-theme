@@ -17,23 +17,41 @@ $contact_url = bluewireseo_get_contact_url();
         <!-- Desktop Navigation -->
         <nav class="bws-nav" id="bws-nav" role="navigation" aria-label="<?php esc_attr_e( 'Primary Navigation', 'bluewireseo' ); ?>">
             <?php
-            $menu_rendered = '';
+            $use_default = true;
             if ( has_nav_menu( 'primary' ) ) {
-                $menu_rendered = wp_nav_menu( array(
-                    'theme_location' => 'primary',
-                    'container'      => false,
-                    'menu_class'     => 'bws-nav-list',
-                    'fallback_cb'    => false,
-                    'items_wrap'     => '<ul class="bws-nav-list" id="%1$s">%3$s</ul>',
-                    'walker'         => new BlueWireSEO_Nav_Walker(),
-                    'echo'           => false,
-                ) );
+                $locations = get_nav_menu_locations();
+                $menu_id   = isset( $locations['primary'] ) ? (int) $locations['primary'] : 0;
+                $menu_items = $menu_id ? wp_get_nav_menu_items( $menu_id ) : array();
+
+                // Count top-level items to prevent an accidental 1-item or partial menu from rendering
+                $top_level_count = 0;
+                if ( ! empty( $menu_items ) && is_array( $menu_items ) ) {
+                    foreach ( $menu_items as $item ) {
+                        if ( empty( $item->menu_item_parent ) || '0' === (string) $item->menu_item_parent ) {
+                            $top_level_count++;
+                        }
+                    }
+                }
+
+                // If user has a valid menu with at least 3 top-level items, render it
+                if ( $top_level_count >= 3 ) {
+                    $menu_rendered = wp_nav_menu( array(
+                        'theme_location' => 'primary',
+                        'container'      => false,
+                        'menu_class'     => 'bws-nav-list',
+                        'fallback_cb'    => false,
+                        'items_wrap'     => '<ul class="bws-nav-list" id="%1$s">%3$s</ul>',
+                        'walker'         => new BlueWireSEO_Nav_Walker(),
+                        'echo'           => false,
+                    ) );
+                    if ( ! empty( $menu_rendered ) && trim( strip_tags( $menu_rendered ) ) !== '' ) {
+                        echo $menu_rendered; // phpcs:ignore WordPress.Security.EscapeOutput
+                        $use_default = false;
+                    }
+                }
             }
 
-            // If menu location not set or menu was emptied / deleted, ALWAYS render default navigation
-            if ( ! empty( $menu_rendered ) && trim( strip_tags( $menu_rendered ) ) !== '' ) {
-                echo $menu_rendered; // phpcs:ignore WordPress.Security.EscapeOutput
-            } else {
+            if ( $use_default ) {
                 bluewireseo_default_navigation();
             }
             ?>
@@ -61,15 +79,24 @@ $contact_url = bluewireseo_get_contact_url();
 <!-- Mobile Navigation -->
 <nav class="bws-mobile-nav" id="bws-mobile-nav" aria-label="<?php esc_attr_e( 'Mobile Navigation', 'bluewireseo' ); ?>" hidden>
     <ul class="bws-mobile-nav-list">
+        <li><a href="<?php echo esc_url( home_url( '/' ) ); ?>"><?php esc_html_e( 'Home', 'bluewireseo' ); ?></a></li>
         <li><a href="<?php echo esc_url( home_url( '/services/' ) ); ?>"><?php esc_html_e( 'Services', 'bluewireseo' ); ?></a>
             <ul class="bws-mobile-sub">
-                <li><a href="<?php echo esc_url( home_url( '/services/seo/' ) ); ?>"><?php esc_html_e( 'SEO Service', 'bluewireseo' ); ?></a></li>
-                <li><a href="<?php echo esc_url( home_url( '/services/seo-audit/' ) ); ?>"><?php esc_html_e( 'SEO Audit', 'bluewireseo' ); ?></a></li>
                 <li><a href="<?php echo esc_url( home_url( '/services/semantic-seo/' ) ); ?>"><?php esc_html_e( 'Semantic SEO', 'bluewireseo' ); ?></a></li>
-                <li><a href="<?php echo esc_url( home_url( '/services/ooh-seo/' ) ); ?>"><?php esc_html_e( 'OOH SEO', 'bluewireseo' ); ?></a></li>
+                <li><a href="<?php echo esc_url( home_url( '/services/technical-seo/' ) ); ?>"><?php esc_html_e( 'Technical SEO', 'bluewireseo' ); ?></a></li>
+                <li><a href="<?php echo esc_url( home_url( '/services/local-seo/' ) ); ?>"><?php esc_html_e( 'Local SEO & GBP', 'bluewireseo' ); ?></a></li>
+                <li><a href="<?php echo esc_url( home_url( '/services/seo-audit/' ) ); ?>"><?php esc_html_e( 'SEO Audit', 'bluewireseo' ); ?></a></li>
+                <li><a href="<?php echo esc_url( home_url( '/services/content-entity-seo/' ) ); ?>"><?php esc_html_e( 'Content & Entity SEO', 'bluewireseo' ); ?></a></li>
+                <li><a href="<?php echo esc_url( home_url( '/services/link-building/' ) ); ?>"><?php esc_html_e( 'Link Building', 'bluewireseo' ); ?></a></li>
             </ul>
         </li>
-        <li><a href="<?php echo esc_url( home_url( '/industries/' ) ); ?>"><?php esc_html_e( 'Industries', 'bluewireseo' ); ?></a></li>
+        <li><a href="<?php echo esc_url( home_url( '/industries/' ) ); ?>"><?php esc_html_e( 'Industries', 'bluewireseo' ); ?></a>
+            <ul class="bws-mobile-sub">
+                <li><a href="<?php echo esc_url( home_url( '/industries/ooh-billboard/' ) ); ?>"><?php esc_html_e( 'OOH & Billboard SEO', 'bluewireseo' ); ?></a></li>
+                <li><a href="<?php echo esc_url( home_url( '/industries/multi-site-portfolio/' ) ); ?>"><?php esc_html_e( 'Multi-Site & Portfolio', 'bluewireseo' ); ?></a></li>
+                <li><a href="<?php echo esc_url( home_url( '/industries/b2b-service-business/' ) ); ?>"><?php esc_html_e( 'B2B Service Businesses', 'bluewireseo' ); ?></a></li>
+            </ul>
+        </li>
         <li><a href="<?php echo esc_url( home_url( '/case-studies/' ) ); ?>"><?php esc_html_e( 'Case Studies', 'bluewireseo' ); ?></a></li>
         <li><a href="<?php echo esc_url( home_url( '/portfolio/' ) ); ?>"><?php esc_html_e( 'Portfolio', 'bluewireseo' ); ?></a></li>
         <li><a href="<?php echo esc_url( home_url( '/process/' ) ); ?>"><?php esc_html_e( 'Process', 'bluewireseo' ); ?></a></li>

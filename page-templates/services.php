@@ -19,7 +19,7 @@ get_header();
             the_content();
             echo '</div>';
         } else {
-            ?>
+            // Retrieve editable meta fields
             $custom_title = get_post_meta( get_the_ID(), '_bws_custom_hero_title', true );
             $title        = ! empty( $custom_title ) ? $custom_title : get_the_title();
             $subtitle     = get_post_meta( get_the_ID(), '_bws_hero_subtitle', true );

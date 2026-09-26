@@ -35,6 +35,7 @@ $contact_url = bluewireseo_get_contact_url();
             $eyebrow      = get_post_meta( get_the_ID(), '_bws_hero_eyebrow', true );
             $pdf_url      = get_post_meta( get_the_ID(), '_bws_pdf_url', true );
             $gsc_image    = get_post_meta( get_the_ID(), '_bws_gsc_image', true );
+            $hide_hero    = get_post_meta( get_the_ID(), '_bws_hide_hero', true );
 
             $categories   = get_the_terms( get_the_ID(), 'bws_portfolio_category' );
             $cat_name     = ( $categories && ! is_wp_error( $categories ) ) ? $categories[0]->name : '';
@@ -45,69 +46,74 @@ $contact_url = bluewireseo_get_contact_url();
             if ( empty( $subtitle ) ) {
                 $subtitle = get_the_excerpt();
             }
-            ?>
 
-            <!-- Hero Section -->
-            <div class="bws-page-hero" style="background: linear-gradient(135deg, #0F1B3D 0%, #16244C 50%, #1E2D5A 100%); color:#FFFFFF; padding: 4.5rem 0 3.5rem; position:relative; overflow:hidden;">
-                <div style="position:absolute; top:-80px; right:-80px; width:450px; height:450px; border-radius:50%; background:radial-gradient(circle, rgba(37,99,235,0.2) 0%, rgba(15,27,61,0) 70%); pointer-events:none;"></div>
-                <div class="bws-container" style="position:relative; z-index:2;">
-                    <?php echo bluewireseo_breadcrumb(); // phpcs:ignore WordPress.Security.EscapeOutput ?>
-                    
-                    <div style="display:flex; gap:0.75rem; align-items:center; margin-top:1.25rem; flex-wrap:wrap;">
-                        <span class="bws-card-tag" style="background:rgba(37,99,235,0.25); color:#93C5FD; border:1px solid rgba(147,197,253,0.3); font-size:0.75rem; padding:0.3rem 0.75rem; font-weight:700;">
-                            <?php echo esc_html( $eyebrow ); ?>
-                        </span>
-                        <?php if ( $project_date ) : ?>
-                            <span style="font-size:0.85rem; color:rgba(255,255,255,0.7); display:inline-flex; align-items:center; gap:0.4rem;">
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;flex-shrink:0;"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-                                <?php echo esc_html( $project_date ); ?>
+            if ( '1' !== $hide_hero ) :
+                ?>
+
+                <!-- Hero Section -->
+                <div class="bws-page-hero" style="background: linear-gradient(135deg, #0F1B3D 0%, #16244C 50%, #1E2D5A 100%); color:#FFFFFF; padding: 4.5rem 0 3.5rem; position:relative; overflow:hidden;">
+                    <div style="position:absolute; top:-80px; right:-80px; width:450px; height:450px; border-radius:50%; background:radial-gradient(circle, rgba(37,99,235,0.2) 0%, rgba(15,27,61,0) 70%); pointer-events:none;"></div>
+                    <div class="bws-container" style="position:relative; z-index:2;">
+                        <?php echo bluewireseo_breadcrumb(); // phpcs:ignore WordPress.Security.EscapeOutput ?>
+                        
+                        <div style="display:flex; gap:0.75rem; align-items:center; margin-top:1.25rem; flex-wrap:wrap;">
+                            <span class="bws-card-tag" style="background:rgba(37,99,235,0.25); color:#93C5FD; border:1px solid rgba(147,197,253,0.3); font-size:0.75rem; padding:0.3rem 0.75rem; font-weight:700;">
+                                <?php echo esc_html( $eyebrow ); ?>
                             </span>
-                        <?php endif; ?>
-                        <?php if ( $industry ) : ?>
-                            <span style="font-size:0.85rem; color:#60A5FA; background:rgba(37,99,235,0.15); padding:0.25rem 0.65rem; border-radius:4px;">
-                                <?php echo esc_html( $industry ); ?>
-                            </span>
-                        <?php endif; ?>
-                    </div>
-
-                    <h1 class="bws-hero-title" style="color:#FFFFFF; font-size:clamp(2.25rem, 4.5vw, 3.25rem); line-height:1.15; margin:0.85rem 0 1rem;">
-                        <?php echo esc_html( $title ); ?>
-                    </h1>
-
-                    <?php if ( $result ) : ?>
-                        <div style="display:inline-flex; align-items:center; gap:0.6rem; padding:0.5rem 1.25rem; background:rgba(37,99,235,0.35); border:1px solid rgba(96,165,250,0.45); border-radius:var(--bws-radius-md); color:#93C5FD; font-weight:800; font-size:1.25rem; margin-bottom:1.25rem;">
-                            <span style="display:inline-flex; width:20px; height:20px; align-items:center; justify-content:center; background:#2563EB; color:#FFFFFF; border-radius:50%; font-size:11px;">✓</span>
-                            <span><?php echo esc_html( $result ); ?></span>
+                            <?php if ( $project_date ) : ?>
+                                <span style="font-size:0.85rem; color:rgba(255,255,255,0.7); display:inline-flex; align-items:center; gap:0.4rem;">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;flex-shrink:0;"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                                    <?php echo esc_html( $project_date ); ?>
+                                </span>
+                            <?php endif; ?>
+                            <?php if ( $industry ) : ?>
+                                <span style="font-size:0.85rem; color:#60A5FA; background:rgba(37,99,235,0.15); padding:0.25rem 0.65rem; border-radius:4px;">
+                                    <?php echo esc_html( $industry ); ?>
+                                </span>
+                            <?php endif; ?>
                         </div>
-                    <?php endif; ?>
 
-                    <?php if ( $subtitle ) : ?>
-                        <p class="bws-hero-subtitle" style="color:rgba(255,255,255,0.85); font-size:1.125rem; line-height:1.65; max-width:760px; margin-bottom:1.5rem;">
-                            <?php echo esc_html( $subtitle ); ?>
-                        </p>
-                    <?php endif; ?>
+                        <h1 class="bws-hero-title" style="color:#FFFFFF; font-size:clamp(2.25rem, 4.5vw, 3.25rem); line-height:1.15; margin:0.85rem 0 1rem;">
+                            <?php echo esc_html( $title ); ?>
+                        </h1>
 
-                    <!-- Action Buttons in Hero -->
-                    <div style="display:flex; gap:1rem; align-items:center; flex-wrap:wrap; margin-top:1.5rem;">
-                        <a href="#audit-section" class="bws-btn bws-btn-primary bws-btn-lg" style="box-shadow:0 4px 14px rgba(37,99,235,0.4);">
-                            <?php esc_html_e( 'Request Similar Audit', 'bluewireseo' ); ?>
-                            <?php echo bluewireseo_icon( 'arrow-right' ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
-                        </a>
-                        <?php if ( $external_url ) : ?>
-                            <a href="<?php echo esc_url( $external_url ); ?>" target="_blank" rel="noopener noreferrer" class="bws-btn bws-btn-outline-white bws-btn-lg" style="display:inline-flex; align-items:center; gap:0.5rem;">
-                                <?php esc_html_e( 'Visit Live Website', 'bluewireseo' ); ?>
-                                <?php echo bluewireseo_icon( 'external-link' ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
-                            </a>
+                        <?php if ( $result ) : ?>
+                            <div style="display:inline-flex; align-items:center; gap:0.6rem; padding:0.5rem 1.25rem; background:rgba(37,99,235,0.35); border:1px solid rgba(96,165,250,0.45); border-radius:var(--bws-radius-md); color:#93C5FD; font-weight:800; font-size:1.25rem; margin-bottom:1.25rem;">
+                                <span style="display:inline-flex; width:20px; height:20px; align-items:center; justify-content:center; background:#2563EB; color:#FFFFFF; border-radius:50%; font-size:11px;">✓</span>
+                                <span><?php echo esc_html( $result ); ?></span>
+                            </div>
                         <?php endif; ?>
-                        <?php if ( $pdf_url ) : ?>
-                            <a href="<?php echo esc_url( $pdf_url ); ?>" target="_blank" rel="noopener noreferrer" class="bws-btn bws-btn-outline-white bws-btn-lg" style="display:inline-flex; align-items:center; gap:0.5rem;">
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px;flex-shrink:0;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-                                <?php esc_html_e( 'Download Master Report (PDF)', 'bluewireseo' ); ?>
-                            </a>
+
+                        <?php if ( $subtitle ) : ?>
+                            <p class="bws-hero-subtitle" style="color:rgba(255,255,255,0.85); font-size:1.125rem; line-height:1.65; max-width:760px; margin-bottom:1.5rem;">
+                                <?php echo esc_html( $subtitle ); ?>
+                            </p>
                         <?php endif; ?>
+
+                        <!-- Action Buttons in Hero -->
+                        <div style="display:flex; gap:1rem; align-items:center; flex-wrap:wrap; margin-top:1.5rem;">
+                            <a href="#audit-section" class="bws-btn bws-btn-primary bws-btn-lg" style="box-shadow:0 4px 14px rgba(37,99,235,0.4);">
+                                <?php esc_html_e( 'Request Similar Audit', 'bluewireseo' ); ?>
+                                <?php echo bluewireseo_icon( 'arrow-right' ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
+                            </a>
+                            <?php if ( $external_url ) : ?>
+                                <a href="<?php echo esc_url( $external_url ); ?>" target="_blank" rel="noopener noreferrer" class="bws-btn bws-btn-outline-white bws-btn-lg" style="display:inline-flex; align-items:center; gap:0.5rem;">
+                                    <?php esc_html_e( 'Visit Live Website', 'bluewireseo' ); ?>
+                                    <?php echo bluewireseo_icon( 'external-link' ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
+                                </a>
+                            <?php endif; ?>
+                            <?php if ( $pdf_url ) : ?>
+                                <a href="<?php echo esc_url( $pdf_url ); ?>" target="_blank" rel="noopener noreferrer" class="bws-btn bws-btn-outline-white bws-btn-lg" style="display:inline-flex; align-items:center; gap:0.5rem;">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px;flex-shrink:0;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                                    <?php esc_html_e( 'Download Master Report (PDF)', 'bluewireseo' ); ?>
+                                </a>
+                            <?php endif; ?>
+                        </div>
                     </div>
                 </div>
-            </div>
+                <?php
+            endif;
+            ?>
 
             <!-- 4-KPI Impact Metric Bar -->
             <div style="background:var(--bws-light-bg); border-bottom:1px solid var(--bws-border); padding:2rem 0;">

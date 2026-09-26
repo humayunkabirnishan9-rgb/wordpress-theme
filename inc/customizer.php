@@ -217,7 +217,7 @@ function bluewireseo_customizer_register( $wp_customize ) {
 
     // Footer Description
     $wp_customize->add_setting( 'bws_footer_desc', array(
-        'default'           => 'Semantic SEO and technical SEO agency serving US businesses. Bangladesh (remote-first, serving US businesses).',
+        'default'           => 'Semantic SEO and technical SEO agency engineered for high-growth commercial enterprises. Delivering verified, data-backed organic revenue across US markets.',
         'sanitize_callback' => 'sanitize_textarea_field',
         'transport'         => 'refresh',
     ) );
