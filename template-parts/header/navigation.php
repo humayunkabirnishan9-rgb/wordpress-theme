@@ -17,17 +17,23 @@ $contact_url = bluewireseo_get_contact_url();
         <!-- Desktop Navigation -->
         <nav class="bws-nav" id="bws-nav" role="navigation" aria-label="<?php esc_attr_e( 'Primary Navigation', 'bluewireseo' ); ?>">
             <?php
+            $menu_rendered = '';
             if ( has_nav_menu( 'primary' ) ) {
-                wp_nav_menu( array(
+                $menu_rendered = wp_nav_menu( array(
                     'theme_location' => 'primary',
                     'container'      => false,
                     'menu_class'     => 'bws-nav-list',
                     'fallback_cb'    => false,
                     'items_wrap'     => '<ul class="bws-nav-list" id="%1$s">%3$s</ul>',
                     'walker'         => new BlueWireSEO_Nav_Walker(),
+                    'echo'           => false,
                 ) );
+            }
+
+            // If menu location not set or menu was emptied / deleted, ALWAYS render default navigation
+            if ( ! empty( $menu_rendered ) && trim( strip_tags( $menu_rendered ) ) !== '' ) {
+                echo $menu_rendered; // phpcs:ignore WordPress.Security.EscapeOutput
             } else {
-                // Default nav if no menu is assigned
                 bluewireseo_default_navigation();
             }
             ?>
@@ -65,6 +71,7 @@ $contact_url = bluewireseo_get_contact_url();
         </li>
         <li><a href="<?php echo esc_url( home_url( '/industries/' ) ); ?>"><?php esc_html_e( 'Industries', 'bluewireseo' ); ?></a></li>
         <li><a href="<?php echo esc_url( home_url( '/case-studies/' ) ); ?>"><?php esc_html_e( 'Case Studies', 'bluewireseo' ); ?></a></li>
+        <li><a href="<?php echo esc_url( home_url( '/portfolio/' ) ); ?>"><?php esc_html_e( 'Portfolio', 'bluewireseo' ); ?></a></li>
         <li><a href="<?php echo esc_url( home_url( '/process/' ) ); ?>"><?php esc_html_e( 'Process', 'bluewireseo' ); ?></a></li>
         <li><a href="<?php echo esc_url( home_url( '/about/' ) ); ?>"><?php esc_html_e( 'About', 'bluewireseo' ); ?></a></li>
         <li><a href="<?php echo esc_url( home_url( '/blog/' ) ); ?>"><?php esc_html_e( 'Blog', 'bluewireseo' ); ?></a></li>

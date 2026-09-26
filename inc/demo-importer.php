@@ -25,30 +25,97 @@ function bluewireseo_setup_menu() {
 add_action( 'admin_menu', 'bluewireseo_setup_menu' );
 
 /**
- * Admin notice for 1-click setup if not yet imported
+ * Check if core pages or front page are missing from the site
  */
-function bluewireseo_setup_admin_notice() {
-    if ( get_option( 'bws_demo_imported' ) ) {
-        return;
+function bluewireseo_are_core_pages_missing() {
+    $front_id = get_option( 'page_on_front' );
+    if ( empty( $front_id ) || 'publish' !== get_post_status( $front_id ) ) {
+        return true;
     }
 
+    $required_slugs = array( 'home', 'services', 'case-studies', 'portfolio' );
+    foreach ( $required_slugs as $slug ) {
+        $page = get_page_by_path( $slug );
+        if ( ! $page || 'publish' !== $page->post_status ) {
+            return true;
+        }
+    }
+
+    $locations = get_nav_menu_locations();
+    if ( empty( $locations['primary'] ) ) {
+        return true;
+    }
+
+    return false;
+}
+
+/**
+ * Handle 1-click Restore query parameter in WP Admin
+ */
+function bluewireseo_handle_restore_action() {
+    if ( isset( $_GET['bws_action'] ) && 'restore' === $_GET['bws_action'] ) {
+        if ( ! current_user_can( 'manage_options' ) ) {
+            wp_die( esc_html__( 'Unauthorized access.', 'bluewireseo' ) );
+        }
+        check_admin_referer( 'bws_restore_action_nonce', 'bws_nonce' );
+
+        bluewireseo_import_demo_content();
+
+        wp_safe_redirect( admin_url( 'themes.php?page=bluewireseo-setup&restored=1' ) );
+        exit;
+    }
+}
+add_action( 'admin_init', 'bluewireseo_handle_restore_action' );
+
+/**
+ * Admin notice for 1-click setup or missing page restore
+ */
+function bluewireseo_setup_admin_notice() {
     $screen = get_current_screen();
     if ( $screen && 'appearance_page_bluewireseo-setup' === $screen->id ) {
         return;
     }
-    ?>
-    <div class="notice notice-info is-dismissible" style="padding:15px; border-left-color:#2563EB;">
-        <h3 style="margin-top:0; color:#0F1B3D;"><?php esc_html_e( 'Welcome to BlueWireSEO Theme!', 'bluewireseo' ); ?></h3>
-        <p style="font-size:14px; line-height:1.5;">
-            <?php esc_html_e( 'Complete your site setup in 1-click. This will configure the BlueWireSEO homepage, about, services, industries, case studies, portfolio, navigation menus, and Elementor integration.', 'bluewireseo' ); ?>
-        </p>
-        <p>
-            <a href="<?php echo esc_url( admin_url( 'themes.php?page=bluewireseo-setup' ) ); ?>" class="button button-primary" style="background:#2563EB; border-color:#1D4ED8;">
-                <?php esc_html_e( 'Run 1-Click BlueWireSEO Setup &rarr;', 'bluewireseo' ); ?>
-            </a>
-        </p>
-    </div>
-    <?php
+
+    $imported     = get_option( 'bws_demo_imported', false );
+    $need_restore = bluewireseo_are_core_pages_missing();
+
+    if ( ! $imported ) {
+        ?>
+        <div class="notice notice-info is-dismissible" style="padding:15px; border-left-color:#2563EB;">
+            <h3 style="margin-top:0; color:#0F1B3D;"><?php esc_html_e( 'Welcome to BlueWireSEO Theme!', 'bluewireseo' ); ?></h3>
+            <p style="font-size:14px; line-height:1.5;">
+                <?php esc_html_e( 'Complete your site setup in 1-click. This will configure the BlueWireSEO homepage, about, services, industries, case studies, portfolio, navigation menus, and Elementor integration.', 'bluewireseo' ); ?>
+            </p>
+            <p>
+                <a href="<?php echo esc_url( admin_url( 'themes.php?page=bluewireseo-setup' ) ); ?>" class="button button-primary" style="background:#2563EB; border-color:#1D4ED8;">
+                    <?php esc_html_e( 'Run 1-Click BlueWireSEO Setup &rarr;', 'bluewireseo' ); ?>
+                </a>
+            </p>
+        </div>
+        <?php
+    } elseif ( $need_restore ) {
+        $restore_url = wp_nonce_url(
+            admin_url( 'themes.php?page=bluewireseo-setup&bws_action=restore' ),
+            'bws_restore_action_nonce',
+            'bws_nonce'
+        );
+        ?>
+        <div class="notice notice-warning is-dismissible" style="padding:15px; border-left-color:#F59E0B;">
+            <h3 style="margin-top:0; color:#B45309;"><?php esc_html_e( 'BlueWireSEO Notice: Core Pages or Menus Missing', 'bluewireseo' ); ?></h3>
+            <p style="font-size:14px; line-height:1.5; color:#1E293B;">
+                <?php esc_html_e( 'It looks like your pages or navigation menus were deleted (or the front page is unassigned). Click below to immediately restore the homepage, case studies, portfolio, services, and primary menu bar.', 'bluewireseo' ); ?>
+            </p>
+            <p>
+                <a href="<?php echo esc_url( $restore_url ); ?>" class="button button-primary" style="background:#2563EB; border-color:#1D4ED8; font-weight:700;">
+                    <?php esc_html_e( 'Restore All Pages & Menus in 1-Click &rarr;', 'bluewireseo' ); ?>
+                </a>
+                <a href="<?php echo esc_url( admin_url( 'themes.php?page=bluewireseo-setup' ) ); ?>" class="button button-secondary" style="margin-left:8px;">
+                    <?php esc_html_e( 'Open Setup Dashboard', 'bluewireseo' ); ?>
+                </a>
+            </p>
+        </div>
+        <?php
+    }
 }
 add_action( 'admin_notices', 'bluewireseo_setup_admin_notice' );
 
@@ -56,13 +123,19 @@ add_action( 'admin_notices', 'bluewireseo_setup_admin_notice' );
  * Setup Page Render
  */
 function bluewireseo_setup_page_callback() {
-    $imported = get_option( 'bws_demo_imported', false );
+    $imported     = get_option( 'bws_demo_imported', false );
+    $need_restore = bluewireseo_are_core_pages_missing();
 
     // Handle manual import submission
     if ( isset( $_POST['bws_run_import'] ) && check_admin_referer( 'bws_import_nonce_action', 'bws_import_nonce' ) ) {
-        $result = bluewireseo_import_demo_content();
-        $imported = true;
+        bluewireseo_import_demo_content();
+        $imported     = true;
+        $need_restore = false;
         echo '<div class="notice notice-success is-dismissible"><p><strong>' . esc_html__( 'BlueWireSEO site setup completed successfully! Your homepage, pages, custom post types, menus, and Elementor templates are now live.', 'bluewireseo' ) . '</strong></p></div>';
+    }
+
+    if ( isset( $_GET['restored'] ) && '1' === $_GET['restored'] ) {
+        echo '<div class="notice notice-success is-dismissible"><p><strong>' . esc_html__( 'All BlueWireSEO core pages, menus, reading settings, and custom post types have been restored successfully!', 'bluewireseo' ) . '</strong></p></div>';
     }
     ?>
     <div class="wrap" style="max-width:900px; margin-top:20px;">
@@ -70,15 +143,20 @@ function bluewireseo_setup_page_callback() {
             <div style="display:flex; align-items:center; gap:15px; margin-bottom:20px; border-bottom:1px solid #E2E8F0; padding-bottom:20px;">
                 <div style="width:48px; height:48px; border-radius:10px; background:#0F1B3D; display:flex; align-items:center; justify-content:center; color:#2563EB; font-size:24px; font-weight:800;">BW</div>
                 <div>
-                    <h1 style="margin:0; font-size:24px; color:#0F1B3D; font-weight:700;"><?php esc_html_e( 'BlueWireSEO — Complete Site Setup', 'bluewireseo' ); ?></h1>
-                    <p style="margin:4px 0 0; color:#718096;"><?php esc_html_e( 'One-click automated setup for the complete BlueWireSEO theme and content.', 'bluewireseo' ); ?></p>
+                    <h1 style="margin:0; font-size:24px; color:#0F1B3D; font-weight:700;"><?php esc_html_e( 'BlueWireSEO — Complete Site Setup & Page Recovery', 'bluewireseo' ); ?></h1>
+                    <p style="margin:4px 0 0; color:#718096;"><?php esc_html_e( 'One-click automated setup and page recovery for the complete BlueWireSEO theme.', 'bluewireseo' ); ?></p>
                 </div>
             </div>
 
-            <?php if ( $imported ) : ?>
+            <?php if ( $need_restore ) : ?>
+                <div style="padding:15px 20px; background:#FFFBEB; border:1px solid #F59E0B; border-radius:8px; margin-bottom:25px; color:#92400E;">
+                    <strong><?php esc_html_e( 'Action Needed:', 'bluewireseo' ); ?></strong>
+                    <?php esc_html_e( 'Some core pages or menus appear to be deleted or unassigned. Click below to restore all pages, menus, and reading settings.', 'bluewireseo' ); ?>
+                </div>
+            <?php elseif ( $imported ) : ?>
                 <div style="padding:15px 20px; background:#ECFDF5; border:1px solid #10B981; border-radius:8px; margin-bottom:25px; color:#065F46;">
                     <strong><?php esc_html_e( 'Status: Active & Configured.', 'bluewireseo' ); ?></strong>
-                    <?php esc_html_e( 'BlueWireSEO demo content and site settings are active. You can re-run the importer at any time to sync data.', 'bluewireseo' ); ?>
+                    <?php esc_html_e( 'BlueWireSEO demo content and site settings are active. You can re-run the importer at any time to sync data or restore deleted pages.', 'bluewireseo' ); ?>
                 </div>
             <?php endif; ?>
 
@@ -202,18 +280,34 @@ function bluewireseo_import_demo_content() {
     $page_ids = array();
 
     foreach ( $pages_to_create as $slug => $data ) {
-        $existing = get_page_by_path( $slug );
+        $existing = get_page_by_path( $slug, OBJECT, 'page' );
+        if ( ! $existing ) {
+            // Check trash and draft statuses
+            $other_posts = get_posts( array(
+                'name'        => $slug,
+                'post_type'   => 'page',
+                'post_status' => array( 'trash', 'draft', 'pending', 'private' ),
+                'numberposts' => 1,
+            ) );
+            if ( ! empty( $other_posts ) ) {
+                $existing = $other_posts[0];
+            }
+        }
+
         if ( $existing ) {
             $page_ids[ $slug ] = $existing->ID;
-            if ( $data['template'] ) {
-                update_post_meta( $existing->ID, '_wp_page_template', $data['template'] );
-            }
+            $update_args = array(
+                'ID'          => $existing->ID,
+                'post_status' => 'publish',
+            );
             // If existing page content is minimal, populate with full rich demo content
             if ( strlen( trim( strip_tags( $existing->post_content ) ) ) < 80 && ! empty( $data['content'] ) ) {
-                wp_update_post( array(
-                    'ID'           => $existing->ID,
-                    'post_content' => $data['content'],
-                ) );
+                $update_args['post_content'] = $data['content'];
+            }
+            wp_update_post( $update_args );
+
+            if ( $data['template'] ) {
+                update_post_meta( $existing->ID, '_wp_page_template', $data['template'] );
             }
         } else {
             $pid = wp_insert_post( array(

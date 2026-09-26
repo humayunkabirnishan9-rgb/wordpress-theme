@@ -71,6 +71,18 @@ function bluewireseo_admin_assets( $hook ) {
         array(),
         BLUEWIRESEO_VERSION
     );
+
+    // Enqueue media uploader scripts on post/page edit screens
+    if ( in_array( $hook, array( 'post.php', 'post-new.php', 'appearance_page_bluewireseo-setup' ), true ) ) {
+        wp_enqueue_media();
+        wp_enqueue_script(
+            'bws-admin-script',
+            BLUEWIRESEO_URI . '/assets/js/admin.js',
+            array( 'jquery' ),
+            BLUEWIRESEO_VERSION,
+            true
+        );
+    }
 }
 add_action( 'admin_enqueue_scripts', 'bluewireseo_admin_assets' );
 

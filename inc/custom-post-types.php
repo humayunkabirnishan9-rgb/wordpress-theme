@@ -314,16 +314,26 @@ function bluewireseo_register_taxonomies() {
 add_action( 'init', 'bluewireseo_register_taxonomies' );
 
 /**
- * Register Custom Meta Boxes for CPTs
+ * Register Custom Meta Boxes for CPTs and Pages
  */
 function bluewireseo_register_meta_boxes() {
     // Case Study meta
     add_meta_box(
         'bws_case_study_details',
-        __( 'Case Study Details', 'bluewireseo' ),
+        __( 'Case Study & Proof Details', 'bluewireseo' ),
         'bluewireseo_case_study_meta_box',
         'bws_case_study',
-        'side',
+        'normal',
+        'high'
+    );
+
+    // Portfolio meta
+    add_meta_box(
+        'bws_portfolio_details',
+        __( 'Portfolio Project & Proof Details', 'bluewireseo' ),
+        'bluewireseo_portfolio_meta_box',
+        'bws_portfolio',
+        'normal',
         'high'
     );
 
@@ -333,7 +343,7 @@ function bluewireseo_register_meta_boxes() {
         __( 'Service Details', 'bluewireseo' ),
         'bluewireseo_service_meta_box',
         'bws_service',
-        'side',
+        'normal',
         'high'
     );
 
@@ -343,21 +353,104 @@ function bluewireseo_register_meta_boxes() {
         __( 'Industry Details', 'bluewireseo' ),
         'bluewireseo_industry_meta_box',
         'bws_industry',
-        'side',
+        'normal',
         'high'
     );
 
-    // Portfolio meta
-    add_meta_box(
-        'bws_portfolio_details',
-        __( 'Portfolio Project Details', 'bluewireseo' ),
-        'bluewireseo_portfolio_meta_box',
-        'bws_portfolio',
-        'side',
-        'high'
-    );
+    // Header & Hero settings for Pages, Services, and Industries
+    $hero_post_types = array( 'page', 'bws_service', 'bws_industry' );
+    foreach ( $hero_post_types as $pt ) {
+        add_meta_box(
+            'bws_page_hero_details',
+            __( 'Header & Hero Section Settings', 'bluewireseo' ),
+            'bluewireseo_page_hero_meta_box',
+            $pt,
+            'normal',
+            'high'
+        );
+    }
 }
 add_action( 'add_meta_boxes', 'bluewireseo_register_meta_boxes' );
+
+/**
+ * Page Hero Meta Box Callback
+ */
+function bluewireseo_page_hero_meta_box( $post ) {
+    wp_nonce_field( 'bws_page_hero_meta', 'bws_page_hero_nonce' );
+    $custom_title = get_post_meta( $post->ID, '_bws_custom_hero_title', true );
+    $subtitle     = get_post_meta( $post->ID, '_bws_hero_subtitle', true );
+    $eyebrow      = get_post_meta( $post->ID, '_bws_hero_eyebrow', true );
+    $pdf_url      = get_post_meta( $post->ID, '_bws_pdf_url', true );
+    $gsc_image    = get_post_meta( $post->ID, '_bws_gsc_image', true );
+    $hide_hero    = get_post_meta( $post->ID, '_bws_hide_hero', true );
+    ?>
+    <table class="form-table bws-meta-table">
+        <tr>
+            <th style="width:220px;"><label for="bws_custom_hero_title"><?php esc_html_e( 'Custom Header Title', 'bluewireseo' ); ?></label></th>
+            <td>
+                <input type="text" id="bws_custom_hero_title" name="bws_custom_hero_title" value="<?php echo esc_attr( $custom_title ); ?>" class="widefat" placeholder="Leave empty to use main page/post title" />
+                <p class="description"><?php esc_html_e( 'Change this if you want the large banner header title to differ from the WordPress title.', 'bluewireseo' ); ?></p>
+            </td>
+        </tr>
+        <tr>
+            <th><label for="bws_hero_eyebrow"><?php esc_html_e( 'Header Eyebrow Badge', 'bluewireseo' ); ?></label></th>
+            <td>
+                <input type="text" id="bws_hero_eyebrow" name="bws_hero_eyebrow" value="<?php echo esc_attr( $eyebrow ); ?>" class="widefat" placeholder="e.g. CORE ARCHITECTURAL SERVICES / VERIFIED REAL RESULTS" />
+                <p class="description"><?php esc_html_e( 'Small uppercase badge displayed directly above the header title.', 'bluewireseo' ); ?></p>
+            </td>
+        </tr>
+        <tr>
+            <th><label for="bws_hero_subtitle"><?php esc_html_e( 'Header Subtitle / Tagline', 'bluewireseo' ); ?></label></th>
+            <td>
+                <textarea id="bws_hero_subtitle" name="bws_hero_subtitle" rows="3" class="widefat" placeholder="Descriptive tagline displayed below the main header title"><?php echo esc_textarea( $subtitle ); ?></textarea>
+            </td>
+        </tr>
+        <tr>
+            <th><label for="bws_page_gsc_image"><?php esc_html_e( 'Search Console / Proof Image', 'bluewireseo' ); ?></label></th>
+            <td>
+                <div style="display:flex; gap:8px; align-items:center;">
+                    <input type="url" id="bws_page_gsc_image" name="bws_gsc_image" value="<?php echo esc_attr( $gsc_image ); ?>" class="regular-text" style="flex:1;" placeholder="https://" />
+                    <button type="button" class="button bws-upload-media-btn" data-target="bws_page_gsc_image" data-media-type="image" data-preview="bws_page_gsc_preview" data-title="Select Search Console Proof Screenshot" data-btn-text="Use This Image"><?php esc_html_e( 'Select / Upload Image', 'bluewireseo' ); ?></button>
+                    <button type="button" class="button bws-clear-media-btn" data-target="bws_page_gsc_image" data-preview="bws_page_gsc_preview"><?php esc_html_e( 'Clear', 'bluewireseo' ); ?></button>
+                </div>
+                <div id="bws_page_gsc_preview" style="margin-top:6px; <?php echo empty( $gsc_image ) ? 'display:none;' : ''; ?>">
+                    <?php if ( ! empty( $gsc_image ) ) : ?>
+                        <div class="bws-media-preview-box"><img src="<?php echo esc_url( $gsc_image ); ?>" style="max-width:280px;height:auto;border-radius:6px;display:block;" /></div>
+                    <?php endif; ?>
+                </div>
+                <p class="description"><?php esc_html_e( 'Upload or select a Google Search Console performance screenshot to display on this page.', 'bluewireseo' ); ?></p>
+            </td>
+        </tr>
+        <tr>
+            <th><label for="bws_page_pdf_url"><?php esc_html_e( 'Proof PDF Document URL', 'bluewireseo' ); ?></label></th>
+            <td>
+                <div style="display:flex; gap:8px; align-items:center;">
+                    <input type="url" id="bws_page_pdf_url" name="bws_pdf_url" value="<?php echo esc_attr( $pdf_url ); ?>" class="regular-text" style="flex:1;" placeholder="https://" />
+                    <button type="button" class="button bws-upload-media-btn" data-target="bws_page_pdf_url" data-media-type="application/pdf" data-preview="bws_page_pdf_preview" data-title="Select Verified Proof PDF Document" data-btn-text="Use This PDF"><?php esc_html_e( 'Select / Upload PDF', 'bluewireseo' ); ?></button>
+                    <button type="button" class="button bws-clear-media-btn" data-target="bws_page_pdf_url" data-preview="bws_page_pdf_preview"><?php esc_html_e( 'Clear', 'bluewireseo' ); ?></button>
+                </div>
+                <div id="bws_page_pdf_preview" style="margin-top:6px; <?php echo empty( $pdf_url ) ? 'display:none;' : ''; ?>">
+                    <?php if ( ! empty( $pdf_url ) ) : ?>
+                        <div style="padding:6px 12px;background:#F0F9FF;border:1px solid #BAE6FD;border-radius:6px;display:inline-flex;align-items:center;gap:6px;font-size:12px;color:#0369A1;">
+                            <strong>PDF Selected:</strong> <?php echo esc_html( basename( parse_url( $pdf_url, PHP_URL_PATH ) ) ); ?>
+                        </div>
+                    <?php endif; ?>
+                </div>
+                <p class="description"><?php esc_html_e( 'Upload your proof PDF report in Media Library to display a verified download badge.', 'bluewireseo' ); ?></p>
+            </td>
+        </tr>
+        <tr>
+            <th><label for="bws_hide_hero"><?php esc_html_e( 'Hide Default Template Hero', 'bluewireseo' ); ?></label></th>
+            <td>
+                <label>
+                    <input type="checkbox" id="bws_hide_hero" name="bws_hide_hero" value="1" <?php checked( $hide_hero, '1' ); ?> />
+                    <?php esc_html_e( 'Check this box if you prefer to build a 100% custom hero banner using the WordPress block editor or Elementor.', 'bluewireseo' ); ?>
+                </label>
+            </td>
+        </tr>
+    </table>
+    <?php
+}
 
 /**
  * Case Study Meta Box Callback
@@ -370,31 +463,85 @@ function bluewireseo_case_study_meta_box( $post ) {
     $data_source  = get_post_meta( $post->ID, '_bws_data_source', true );
     $time_period  = get_post_meta( $post->ID, '_bws_time_period', true );
     $services_used = get_post_meta( $post->ID, '_bws_services_used', true );
+    $custom_title = get_post_meta( $post->ID, '_bws_custom_hero_title', true );
+    $subtitle     = get_post_meta( $post->ID, '_bws_hero_subtitle', true );
+    $eyebrow      = get_post_meta( $post->ID, '_bws_hero_eyebrow', true );
+    $pdf_url      = get_post_meta( $post->ID, '_bws_pdf_url', true );
+    $gsc_image    = get_post_meta( $post->ID, '_bws_gsc_image', true );
     ?>
     <table class="form-table bws-meta-table">
         <tr>
-            <th><label for="bws_client"><?php esc_html_e( 'Client/Company', 'bluewireseo' ); ?></label></th>
-            <td><input type="text" id="bws_client" name="bws_client" value="<?php echo esc_attr( $client ); ?>" class="widefat" placeholder="[PLACEHOLDER: Client name]" /></td>
+            <th style="width:200px;"><label for="bws_custom_hero_title"><?php esc_html_e( 'Custom Header Title', 'bluewireseo' ); ?></label></th>
+            <td>
+                <input type="text" id="bws_custom_hero_title" name="bws_custom_hero_title" value="<?php echo esc_attr( $custom_title ); ?>" class="widefat" placeholder="Leave empty to use the post title" />
+                <p class="description"><?php esc_html_e( 'Change this if you want the large header title to differ from the post title.', 'bluewireseo' ); ?></p>
+            </td>
+        </tr>
+        <tr>
+            <th><label for="bws_hero_subtitle"><?php esc_html_e( 'Header Subtitle', 'bluewireseo' ); ?></label></th>
+            <td><textarea id="bws_hero_subtitle" name="bws_hero_subtitle" rows="2" class="widefat" placeholder="Leave empty to use post excerpt"><?php echo esc_textarea( $subtitle ); ?></textarea></td>
+        </tr>
+        <tr>
+            <th><label for="bws_hero_eyebrow"><?php esc_html_e( 'Header Eyebrow Badge', 'bluewireseo' ); ?></label></th>
+            <td><input type="text" id="bws_hero_eyebrow" name="bws_hero_eyebrow" value="<?php echo esc_attr( $eyebrow ); ?>" class="widefat" placeholder="e.g. VERIFIED REAL RESULTS" /></td>
+        </tr>
+        <tr>
+            <th><label for="bws_client"><?php esc_html_e( 'Client / Brand', 'bluewireseo' ); ?></label></th>
+            <td><input type="text" id="bws_client" name="bws_client" value="<?php echo esc_attr( $client ); ?>" class="widefat" placeholder="e.g. GlobalAir (globalair.com.bd)" /></td>
         </tr>
         <tr>
             <th><label for="bws_industry_field"><?php esc_html_e( 'Industry', 'bluewireseo' ); ?></label></th>
-            <td><input type="text" id="bws_industry_field" name="bws_industry_field" value="<?php echo esc_attr( $industry ); ?>" class="widefat" placeholder="e.g. OOH Advertising" /></td>
+            <td><input type="text" id="bws_industry_field" name="bws_industry_field" value="<?php echo esc_attr( $industry ); ?>" class="widefat" placeholder="e.g. Airport Assistance Services" /></td>
         </tr>
         <tr>
-            <th><label for="bws_result_metric"><?php esc_html_e( 'Key Result / Metric', 'bluewireseo' ); ?></label></th>
-            <td><input type="text" id="bws_result_metric" name="bws_result_metric" value="<?php echo esc_attr( $result ); ?>" class="widefat" placeholder="[PLACEHOLDER: +X% organic impressions]" /></td>
+            <th><label for="bws_result_metric"><?php esc_html_e( 'Key Result / Impact Metric', 'bluewireseo' ); ?></label></th>
+            <td><input type="text" id="bws_result_metric" name="bws_result_metric" value="<?php echo esc_attr( $result ); ?>" class="widefat" placeholder="e.g. 56x Clicks / 245x Impressions" /></td>
         </tr>
         <tr>
             <th><label for="bws_data_source"><?php esc_html_e( 'Data Source', 'bluewireseo' ); ?></label></th>
-            <td><input type="text" id="bws_data_source" name="bws_data_source" value="<?php echo esc_attr( $data_source ); ?>" class="widefat" placeholder="e.g. Google Search Console" /></td>
+            <td><input type="text" id="bws_data_source" name="bws_data_source" value="<?php echo esc_attr( $data_source ); ?>" class="widefat" placeholder="e.g. Google Search Console (28-Day Window)" /></td>
         </tr>
         <tr>
-            <th><label for="bws_time_period"><?php esc_html_e( 'Time Period', 'bluewireseo' ); ?></label></th>
-            <td><input type="text" id="bws_time_period" name="bws_time_period" value="<?php echo esc_attr( $time_period ); ?>" class="widefat" placeholder="[PLACEHOLDER: date range]" /></td>
+            <th><label for="bws_time_period"><?php esc_html_e( 'Measurement Window', 'bluewireseo' ); ?></label></th>
+            <td><input type="text" id="bws_time_period" name="bws_time_period" value="<?php echo esc_attr( $time_period ); ?>" class="widefat" placeholder="e.g. May – June 2026" /></td>
         </tr>
         <tr>
-            <th><label for="bws_services_used"><?php esc_html_e( 'Services Used', 'bluewireseo' ); ?></label></th>
-            <td><input type="text" id="bws_services_used" name="bws_services_used" value="<?php echo esc_attr( $services_used ); ?>" class="widefat" placeholder="e.g. Semantic SEO, Local SEO" /></td>
+            <th><label for="bws_services_used"><?php esc_html_e( 'Services Provided', 'bluewireseo' ); ?></label></th>
+            <td><input type="text" id="bws_services_used" name="bws_services_used" value="<?php echo esc_attr( $services_used ); ?>" class="widefat" placeholder="e.g. Technical SEO, Canonical Fix, Metadata & Pillar Architecture" /></td>
+        </tr>
+        <tr>
+            <th><label for="bws_gsc_image"><?php esc_html_e( 'GSC Proof Image URL', 'bluewireseo' ); ?></label></th>
+            <td>
+                <div style="display:flex; gap:8px; align-items:center;">
+                    <input type="url" id="bws_gsc_image" name="bws_gsc_image" value="<?php echo esc_attr( $gsc_image ); ?>" class="regular-text" style="flex:1;" placeholder="https://" />
+                    <button type="button" class="button bws-upload-media-btn" data-target="bws_gsc_image" data-media-type="image" data-preview="bws_cs_gsc_preview" data-title="Select Search Console Proof Screenshot" data-btn-text="Use This Screenshot"><?php esc_html_e( 'Select / Upload Image', 'bluewireseo' ); ?></button>
+                    <button type="button" class="button bws-clear-media-btn" data-target="bws_gsc_image" data-preview="bws_cs_gsc_preview"><?php esc_html_e( 'Clear', 'bluewireseo' ); ?></button>
+                </div>
+                <div id="bws_cs_gsc_preview" style="margin-top:6px; <?php echo empty( $gsc_image ) ? 'display:none;' : ''; ?>">
+                    <?php if ( ! empty( $gsc_image ) ) : ?>
+                        <div class="bws-media-preview-box"><img src="<?php echo esc_url( $gsc_image ); ?>" style="max-width:280px;height:auto;border-radius:6px;display:block;" /></div>
+                    <?php endif; ?>
+                </div>
+                <p class="description"><?php esc_html_e( 'Upload Search Console screenshot in Media Library or set as Featured Image.', 'bluewireseo' ); ?></p>
+            </td>
+        </tr>
+        <tr>
+            <th><label for="bws_pdf_url_cs"><?php esc_html_e( 'Proof PDF Document URL', 'bluewireseo' ); ?></label></th>
+            <td>
+                <div style="display:flex; gap:8px; align-items:center;">
+                    <input type="url" id="bws_pdf_url_cs" name="bws_pdf_url" value="<?php echo esc_attr( $pdf_url ); ?>" class="regular-text" style="flex:1;" placeholder="https://" />
+                    <button type="button" class="button bws-upload-media-btn" data-target="bws_pdf_url_cs" data-media-type="application/pdf" data-preview="bws_cs_pdf_preview" data-title="Select Case Study Master Plan PDF" data-btn-text="Use This PDF"><?php esc_html_e( 'Select / Upload PDF', 'bluewireseo' ); ?></button>
+                    <button type="button" class="button bws-clear-media-btn" data-target="bws_pdf_url_cs" data-preview="bws_cs_pdf_preview"><?php esc_html_e( 'Clear', 'bluewireseo' ); ?></button>
+                </div>
+                <div id="bws_cs_pdf_preview" style="margin-top:6px; <?php echo empty( $pdf_url ) ? 'display:none;' : ''; ?>">
+                    <?php if ( ! empty( $pdf_url ) ) : ?>
+                        <div style="padding:6px 12px;background:#F0F9FF;border:1px solid #BAE6FD;border-radius:6px;display:inline-flex;align-items:center;gap:6px;font-size:12px;color:#0369A1;">
+                            <strong>PDF Selected:</strong> <?php echo esc_html( basename( parse_url( $pdf_url, PHP_URL_PATH ) ) ); ?>
+                        </div>
+                    <?php endif; ?>
+                </div>
+                <p class="description"><?php esc_html_e( 'Upload case study master plan PDF in Media Library and click Select / Upload PDF.', 'bluewireseo' ); ?></p>
+            </td>
         </tr>
     </table>
     <?php
@@ -464,19 +611,39 @@ function bluewireseo_portfolio_meta_box( $post ) {
     $external_url = get_post_meta( $post->ID, '_bws_external_url', true );
     $result       = get_post_meta( $post->ID, '_bws_result_metric', true );
     $project_date = get_post_meta( $post->ID, '_bws_project_date', true );
+    $custom_title = get_post_meta( $post->ID, '_bws_custom_hero_title', true );
+    $subtitle     = get_post_meta( $post->ID, '_bws_hero_subtitle', true );
+    $eyebrow      = get_post_meta( $post->ID, '_bws_hero_eyebrow', true );
+    $pdf_url      = get_post_meta( $post->ID, '_bws_pdf_url', true );
+    $gsc_image    = get_post_meta( $post->ID, '_bws_gsc_image', true );
     ?>
     <table class="form-table bws-meta-table">
         <tr>
+            <th style="width:200px;"><label for="bws_port_custom_hero_title"><?php esc_html_e( 'Custom Header Title', 'bluewireseo' ); ?></label></th>
+            <td>
+                <input type="text" id="bws_port_custom_hero_title" name="bws_custom_hero_title" value="<?php echo esc_attr( $custom_title ); ?>" class="widefat" placeholder="Leave empty to use main post title" />
+                <p class="description"><?php esc_html_e( 'Change this if you want the large header title to differ from the post title.', 'bluewireseo' ); ?></p>
+            </td>
+        </tr>
+        <tr>
+            <th><label for="bws_port_hero_subtitle"><?php esc_html_e( 'Header Subtitle', 'bluewireseo' ); ?></label></th>
+            <td><textarea id="bws_port_hero_subtitle" name="bws_hero_subtitle" rows="2" class="widefat" placeholder="Leave empty to use post excerpt"><?php echo esc_textarea( $subtitle ); ?></textarea></td>
+        </tr>
+        <tr>
+            <th><label for="bws_port_hero_eyebrow"><?php esc_html_e( 'Header Eyebrow Badge', 'bluewireseo' ); ?></label></th>
+            <td><input type="text" id="bws_port_hero_eyebrow" name="bws_hero_eyebrow" value="<?php echo esc_attr( $eyebrow ); ?>" class="widefat" placeholder="e.g. FEATURED CLIENT ENGAGEMENT" /></td>
+        </tr>
+        <tr>
             <th><label for="bws_port_client"><?php esc_html_e( 'Client / Brand', 'bluewireseo' ); ?></label></th>
-            <td><input type="text" id="bws_port_client" name="bws_port_client" value="<?php echo esc_attr( $client ); ?>" class="widefat" placeholder="Client Name" /></td>
+            <td><input type="text" id="bws_port_client" name="bws_port_client" value="<?php echo esc_attr( $client ); ?>" class="widefat" placeholder="e.g. GlobalAir (globalair.com.bd)" /></td>
         </tr>
         <tr>
             <th><label for="bws_port_industry"><?php esc_html_e( 'Industry', 'bluewireseo' ); ?></label></th>
-            <td><input type="text" id="bws_port_industry" name="bws_port_industry" value="<?php echo esc_attr( $industry ); ?>" class="widefat" placeholder="e.g. OOH Advertising" /></td>
+            <td><input type="text" id="bws_port_industry" name="bws_port_industry" value="<?php echo esc_attr( $industry ); ?>" class="widefat" placeholder="e.g. Airport Assistance Services" /></td>
         </tr>
         <tr>
             <th><label for="bws_port_services"><?php esc_html_e( 'Services Provided', 'bluewireseo' ); ?></label></th>
-            <td><input type="text" id="bws_port_services" name="bws_port_services" value="<?php echo esc_attr( $services ); ?>" class="widefat" placeholder="e.g. Semantic SEO, Technical Audit" /></td>
+            <td><input type="text" id="bws_port_services" name="bws_port_services" value="<?php echo esc_attr( $services ); ?>" class="widefat" placeholder="e.g. Technical SEO, Canonical Integrity, Content Architecture" /></td>
         </tr>
         <tr>
             <th><label for="bws_port_url"><?php esc_html_e( 'Live Website URL', 'bluewireseo' ); ?></label></th>
@@ -484,11 +651,45 @@ function bluewireseo_portfolio_meta_box( $post ) {
         </tr>
         <tr>
             <th><label for="bws_port_result"><?php esc_html_e( 'Key Result / Impact', 'bluewireseo' ); ?></label></th>
-            <td><input type="text" id="bws_port_result" name="bws_port_result" value="<?php echo esc_attr( $result ); ?>" class="widefat" placeholder="e.g. +140% Qualified Inbound" /></td>
+            <td><input type="text" id="bws_port_result" name="bws_port_result" value="<?php echo esc_attr( $result ); ?>" class="widefat" placeholder="e.g. 56x Clicks / 245x Impressions" /></td>
         </tr>
         <tr>
             <th><label for="bws_port_date"><?php esc_html_e( 'Timeline / Date', 'bluewireseo' ); ?></label></th>
-            <td><input type="text" id="bws_port_date" name="bws_port_date" value="<?php echo esc_attr( $project_date ); ?>" class="widefat" placeholder="e.g. Q3 2024" /></td>
+            <td><input type="text" id="bws_port_date" name="bws_port_date" value="<?php echo esc_attr( $project_date ); ?>" class="widefat" placeholder="e.g. May – June 2026" /></td>
+        </tr>
+        <tr>
+            <th><label for="bws_port_gsc_image"><?php esc_html_e( 'Proof Image / GSC Screenshot URL', 'bluewireseo' ); ?></label></th>
+            <td>
+                <div style="display:flex; gap:8px; align-items:center;">
+                    <input type="url" id="bws_port_gsc_image" name="bws_gsc_image" value="<?php echo esc_attr( $gsc_image ); ?>" class="regular-text" style="flex:1;" placeholder="https://" />
+                    <button type="button" class="button bws-upload-media-btn" data-target="bws_port_gsc_image" data-media-type="image" data-preview="bws_port_gsc_preview" data-title="Select Search Console Proof Screenshot" data-btn-text="Use This Screenshot"><?php esc_html_e( 'Select / Upload Image', 'bluewireseo' ); ?></button>
+                    <button type="button" class="button bws-clear-media-btn" data-target="bws_port_gsc_image" data-preview="bws_port_gsc_preview"><?php esc_html_e( 'Clear', 'bluewireseo' ); ?></button>
+                </div>
+                <div id="bws_port_gsc_preview" style="margin-top:6px; <?php echo empty( $gsc_image ) ? 'display:none;' : ''; ?>">
+                    <?php if ( ! empty( $gsc_image ) ) : ?>
+                        <div class="bws-media-preview-box"><img src="<?php echo esc_url( $gsc_image ); ?>" style="max-width:280px;height:auto;border-radius:6px;display:block;" /></div>
+                    <?php endif; ?>
+                </div>
+                <p class="description"><?php esc_html_e( 'Upload Search Console screenshot in Media Library or set as Featured Image.', 'bluewireseo' ); ?></p>
+            </td>
+        </tr>
+        <tr>
+            <th><label for="bws_port_pdf_url"><?php esc_html_e( 'Proof PDF Document URL', 'bluewireseo' ); ?></label></th>
+            <td>
+                <div style="display:flex; gap:8px; align-items:center;">
+                    <input type="url" id="bws_port_pdf_url" name="bws_pdf_url" value="<?php echo esc_attr( $pdf_url ); ?>" class="regular-text" style="flex:1;" placeholder="https://" />
+                    <button type="button" class="button bws-upload-media-btn" data-target="bws_port_pdf_url" data-media-type="application/pdf" data-preview="bws_port_pdf_preview" data-title="Select Portfolio Proof PDF Report" data-btn-text="Use This PDF"><?php esc_html_e( 'Select / Upload PDF', 'bluewireseo' ); ?></button>
+                    <button type="button" class="button bws-clear-media-btn" data-target="bws_port_pdf_url" data-preview="bws_port_pdf_preview"><?php esc_html_e( 'Clear', 'bluewireseo' ); ?></button>
+                </div>
+                <div id="bws_port_pdf_preview" style="margin-top:6px; <?php echo empty( $pdf_url ) ? 'display:none;' : ''; ?>">
+                    <?php if ( ! empty( $pdf_url ) ) : ?>
+                        <div style="padding:6px 12px;background:#F0F9FF;border:1px solid #BAE6FD;border-radius:6px;display:inline-flex;align-items:center;gap:6px;font-size:12px;color:#0369A1;">
+                            <strong>PDF Selected:</strong> <?php echo esc_html( basename( parse_url( $pdf_url, PHP_URL_PATH ) ) ); ?>
+                        </div>
+                    <?php endif; ?>
+                </div>
+                <p class="description"><?php esc_html_e( 'Upload proof PDF report in Media Library and click Select / Upload PDF.', 'bluewireseo' ); ?></p>
+            </td>
         </tr>
     </table>
     <?php
@@ -507,20 +708,52 @@ function bluewireseo_save_meta_boxes( $post_id ) {
         return;
     }
 
+    // Page Hero
+    if ( isset( $_POST['bws_page_hero_nonce'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['bws_page_hero_nonce'] ) ), 'bws_page_hero_meta' ) ) {
+        if ( isset( $_POST['bws_custom_hero_title'] ) ) {
+            update_post_meta( $post_id, '_bws_custom_hero_title', sanitize_text_field( wp_unslash( $_POST['bws_custom_hero_title'] ) ) );
+        }
+        if ( isset( $_POST['bws_hero_subtitle'] ) ) {
+            update_post_meta( $post_id, '_bws_hero_subtitle', sanitize_textarea_field( wp_unslash( $_POST['bws_hero_subtitle'] ) ) );
+        }
+        if ( isset( $_POST['bws_hero_eyebrow'] ) ) {
+            update_post_meta( $post_id, '_bws_hero_eyebrow', sanitize_text_field( wp_unslash( $_POST['bws_hero_eyebrow'] ) ) );
+        }
+        if ( isset( $_POST['bws_pdf_url'] ) ) {
+            update_post_meta( $post_id, '_bws_pdf_url', esc_url_raw( wp_unslash( $_POST['bws_pdf_url'] ) ) );
+        }
+        if ( isset( $_POST['bws_gsc_image'] ) ) {
+            update_post_meta( $post_id, '_bws_gsc_image', esc_url_raw( wp_unslash( $_POST['bws_gsc_image'] ) ) );
+        }
+        $hide_hero = isset( $_POST['bws_hide_hero'] ) ? '1' : '0';
+        update_post_meta( $post_id, '_bws_hide_hero', $hide_hero );
+    }
+
     // Case Study
     if ( isset( $_POST['bws_case_study_nonce'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['bws_case_study_nonce'] ) ), 'bws_case_study_meta' ) ) {
         $fields = array(
-            'bws_client'        => '_bws_client',
-            'bws_industry_field'=> '_bws_industry',
-            'bws_result_metric' => '_bws_result_metric',
-            'bws_data_source'   => '_bws_data_source',
-            'bws_time_period'   => '_bws_time_period',
-            'bws_services_used' => '_bws_services_used',
+            'bws_client'            => '_bws_client',
+            'bws_industry_field'    => '_bws_industry',
+            'bws_result_metric'     => '_bws_result_metric',
+            'bws_data_source'       => '_bws_data_source',
+            'bws_time_period'       => '_bws_time_period',
+            'bws_services_used'     => '_bws_services_used',
+            'bws_custom_hero_title' => '_bws_custom_hero_title',
+            'bws_hero_eyebrow'      => '_bws_hero_eyebrow',
         );
         foreach ( $fields as $field => $meta_key ) {
             if ( isset( $_POST[ $field ] ) ) {
                 update_post_meta( $post_id, $meta_key, sanitize_text_field( wp_unslash( $_POST[ $field ] ) ) );
             }
+        }
+        if ( isset( $_POST['bws_hero_subtitle'] ) ) {
+            update_post_meta( $post_id, '_bws_hero_subtitle', sanitize_textarea_field( wp_unslash( $_POST['bws_hero_subtitle'] ) ) );
+        }
+        if ( isset( $_POST['bws_pdf_url'] ) ) {
+            update_post_meta( $post_id, '_bws_pdf_url', esc_url_raw( wp_unslash( $_POST['bws_pdf_url'] ) ) );
+        }
+        if ( isset( $_POST['bws_gsc_image'] ) ) {
+            update_post_meta( $post_id, '_bws_gsc_image', esc_url_raw( wp_unslash( $_POST['bws_gsc_image'] ) ) );
         }
     }
 
@@ -555,21 +788,30 @@ function bluewireseo_save_meta_boxes( $post_id ) {
     // Portfolio
     if ( isset( $_POST['bws_portfolio_nonce'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['bws_portfolio_nonce'] ) ), 'bws_portfolio_meta' ) ) {
         $fields = array(
-            'bws_port_client'   => '_bws_client',
-            'bws_port_industry' => '_bws_industry',
-            'bws_port_services' => '_bws_services_used',
-            'bws_port_url'      => '_bws_external_url',
-            'bws_port_result'   => '_bws_result_metric',
-            'bws_port_date'     => '_bws_project_date',
+            'bws_port_client'       => '_bws_client',
+            'bws_port_industry'     => '_bws_industry',
+            'bws_port_services'     => '_bws_services_used',
+            'bws_port_result'       => '_bws_result_metric',
+            'bws_port_date'         => '_bws_project_date',
+            'bws_custom_hero_title' => '_bws_custom_hero_title',
+            'bws_hero_eyebrow'      => '_bws_hero_eyebrow',
         );
         foreach ( $fields as $field => $meta_key ) {
             if ( isset( $_POST[ $field ] ) ) {
-                if ( 'bws_port_url' === $field ) {
-                    update_post_meta( $post_id, $meta_key, esc_url_raw( wp_unslash( $_POST[ $field ] ) ) );
-                } else {
-                    update_post_meta( $post_id, $meta_key, sanitize_text_field( wp_unslash( $_POST[ $field ] ) ) );
-                }
+                update_post_meta( $post_id, $meta_key, sanitize_text_field( wp_unslash( $_POST[ $field ] ) ) );
             }
+        }
+        if ( isset( $_POST['bws_port_url'] ) ) {
+            update_post_meta( $post_id, '_bws_external_url', esc_url_raw( wp_unslash( $_POST['bws_port_url'] ) ) );
+        }
+        if ( isset( $_POST['bws_hero_subtitle'] ) ) {
+            update_post_meta( $post_id, '_bws_hero_subtitle', sanitize_textarea_field( wp_unslash( $_POST['bws_hero_subtitle'] ) ) );
+        }
+        if ( isset( $_POST['bws_pdf_url'] ) ) {
+            update_post_meta( $post_id, '_bws_pdf_url', esc_url_raw( wp_unslash( $_POST['bws_pdf_url'] ) ) );
+        }
+        if ( isset( $_POST['bws_gsc_image'] ) ) {
+            update_post_meta( $post_id, '_bws_gsc_image', esc_url_raw( wp_unslash( $_POST['bws_gsc_image'] ) ) );
         }
     }
 }

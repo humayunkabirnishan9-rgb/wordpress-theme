@@ -7,6 +7,17 @@
  */
 
 get_header();
+
+// If on site front page or if pages were deleted and no posts exist on home, render full BlueWireSEO homepage
+if ( is_front_page() || ( is_home() && ! have_posts() ) ) :
+    ?>
+    <main id="primary-content" class="bws-main" role="main">
+        <?php get_template_part( 'template-parts/page-sections/home-content' ); ?>
+    </main>
+    <?php
+    get_footer();
+    return;
+endif;
 ?>
 
 <main id="primary-content" class="bws-main" role="main">
@@ -16,7 +27,8 @@ get_header();
 
             <?php if ( is_home() && ! is_front_page() ) : ?>
                 <header class="bws-inner-hero">
-                    <h1 class="bws-hero-title"><?php esc_html_e( 'Blog', 'bluewireseo' ); ?></h1>
+                    <h1 class="bws-hero-title"><?php esc_html_e( 'Blog & SEO Insights', 'bluewireseo' ); ?></h1>
+                    <p class="bws-hero-subtitle"><?php esc_html_e( 'Strategic playbooks on semantic SEO, topical entity graphs, and technical search architecture.', 'bluewireseo' ); ?></p>
                 </header>
             <?php endif; ?>
 
@@ -55,11 +67,16 @@ get_header();
         <?php else : ?>
 
             <div style="padding: 4rem 0; text-align:center;">
-                <h2><?php esc_html_e( 'No content found.', 'bluewireseo' ); ?></h2>
-                <p><?php esc_html_e( 'Try searching or visiting the homepage.', 'bluewireseo' ); ?></p>
-                <a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="bws-btn bws-btn-primary" style="margin-top:1.5rem;">
-                    <?php esc_html_e( 'Go to Homepage', 'bluewireseo' ); ?>
-                </a>
+                <h2><?php esc_html_e( 'No posts found.', 'bluewireseo' ); ?></h2>
+                <p><?php esc_html_e( 'Explore our core services or request a free technical SEO audit.', 'bluewireseo' ); ?></p>
+                <div style="display:flex; gap:1rem; justify-content:center; margin-top:1.5rem; flex-wrap:wrap;">
+                    <a href="<?php echo esc_url( home_url( '/services/' ) ); ?>" class="bws-btn bws-btn-outline">
+                        <?php esc_html_e( 'Explore Services', 'bluewireseo' ); ?>
+                    </a>
+                    <a href="<?php echo esc_url( home_url( '/free-seo-audit/' ) ); ?>" class="bws-btn bws-btn-primary">
+                        <?php esc_html_e( 'Get Free Audit', 'bluewireseo' ); ?>
+                    </a>
+                </div>
             </div>
 
         <?php endif; ?>
