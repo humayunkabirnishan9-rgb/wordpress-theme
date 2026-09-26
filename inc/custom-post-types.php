@@ -826,3 +826,59 @@ function bluewireseo_flush_rewrite_rules() {
     flush_rewrite_rules();
 }
 add_action( 'after_switch_theme', 'bluewireseo_flush_rewrite_rules' );
+
+/**
+ * Add explicit rewrite rules for Custom Post Types to prevent slug collision and 404s
+ */
+function bluewireseo_cpt_rewrite_rules() {
+    add_rewrite_rule( '^services/([^/]+)/?$', 'index.php?bws_service=$matches[1]', 'top' );
+    add_rewrite_rule( '^case-studies/([^/]+)/?$', 'index.php?bws_case_study=$matches[1]', 'top' );
+    add_rewrite_rule( '^portfolio/([^/]+)/?$', 'index.php?bws_portfolio=$matches[1]', 'top' );
+    add_rewrite_rule( '^industries/([^/]+)/?$', 'index.php?bws_industry=$matches[1]', 'top' );
+}
+add_action( 'init', 'bluewireseo_cpt_rewrite_rules', 20 );
+
+/**
+ * Prevent WordPress canonical redirect loops on custom post type single pages
+ */
+function bluewireseo_prevent_cpt_redirect_loops( $redirect_url, $requested_url ) {
+    if ( is_singular( 'bws_service' ) || is_singular( 'bws_case_study' ) || is_singular( 'bws_portfolio' ) || is_singular( 'bws_industry' ) ) {
+        return false;
+    }
+    if ( preg_match( '#/(services|case-studies|portfolio|industries)/[^/]+/?$#', $requested_url ) ) {
+        return false;
+    }
+    return $redirect_url;
+}
+add_filter( 'redirect_canonical', 'bluewireseo_prevent_cpt_redirect_loops', 10, 2 );
+
+/**
+ * Handle custom post type URLs even before permalinks are flushed
+ */
+function bluewireseo_cpt_request_filter( $query_vars ) {
+    if ( isset( $query_vars['pagename'] ) ) {
+        $pn = $query_vars['pagename'];
+        $cpt_map = array(
+            'services/'     => 'bws_service',
+            'case-studies/' => 'bws_case_study',
+            'portfolio/'    => 'bws_portfolio',
+            'industries/'   => 'bws_industry',
+        );
+        foreach ( $cpt_map as $prefix => $cpt ) {
+            if ( strpos( $pn, $prefix ) === 0 ) {
+                $slug = substr( $pn, strlen( $prefix ) );
+                $post = get_page_by_path( $slug, OBJECT, $cpt );
+                if ( $post ) {
+                    unset( $query_vars['pagename'] );
+                    $query_vars[ $cpt ]      = $slug;
+                    $query_vars['post_type'] = $cpt;
+                    $query_vars['name']      = $slug;
+                    break;
+                }
+            }
+        }
+    }
+    return $query_vars;
+}
+add_filter( 'request', 'bluewireseo_cpt_request_filter', 1 );
+

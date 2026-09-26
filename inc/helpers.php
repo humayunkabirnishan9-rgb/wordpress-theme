@@ -320,7 +320,11 @@ function bluewireseo_get_copyright() {
  * Get footer description
  */
 function bluewireseo_get_footer_desc() {
-    return get_theme_mod( 'bws_footer_desc', 'Semantic SEO and technical SEO agency engineered for high-growth commercial enterprises. Delivering verified, data-backed organic revenue across US markets.' );
+    $desc = get_theme_mod( 'bws_footer_desc', '' );
+    if ( empty( $desc ) || stripos( $desc, 'remote-first' ) !== false || stripos( $desc, 'remote' ) !== false ) {
+        $desc = 'Semantic SEO and technical SEO agency engineered for high-growth commercial enterprises. Delivering verified, data-backed organic revenue across US markets.';
+    }
+    return $desc;
 }
 
 /**

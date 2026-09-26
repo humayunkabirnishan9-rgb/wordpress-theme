@@ -1,0 +1,137 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0F1B3D" />
+      <stop offset="50%" stop-color="#16244C" />
+      <stop offset="100%" stop-color="#1E2D5A" />
+    </linearGradient>
+    <radialGradient id="auraGlow" cx="50%" cy="40%" r="50%">
+      <stop offset="0%" stop-color="#2563EB" stop-opacity="0.35" />
+      <stop offset="100%" stop-color="#0F1B3D" stop-opacity="0" />
+    </radialGradient>
+    <linearGradient id="skinGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#D99B77" />
+      <stop offset="60%" stop-color="#C6835D" />
+      <stop offset="100%" stop-color="#AE6E49" />
+    </linearGradient>
+    <linearGradient id="hairGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1A1A24" />
+      <stop offset="50%" stop-color="#0F0F17" />
+      <stop offset="100%" stop-color="#050508" />
+    </linearGradient>
+    <linearGradient id="tiePattern" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1E293B" />
+      <stop offset="30%" stop-color="#334155" />
+      <stop offset="50%" stop-color="#94A3B8" />
+      <stop offset="70%" stop-color="#1E293B" />
+      <stop offset="100%" stop-color="#0F172A" />
+    </linearGradient>
+    <linearGradient id="shirtGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF" />
+      <stop offset="70%" stop-color="#F1F5F9" />
+      <stop offset="100%" stop-color="#E2E8F0" />
+    </linearGradient>
+    <linearGradient id="ringGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#60A5FA" />
+      <stop offset="50%" stop-color="#2563EB" />
+      <stop offset="100%" stop-color="#1D4ED8" />
+    </linearGradient>
+    <filter id="cardShadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="12" stdDeviation="16" flood-color="#0A1228" flood-opacity="0.4" />
+    </filter>
+  </defs>
+
+  <!-- Background Base -->
+  <rect width="500" height="500" fill="url(#bgGrad)" />
+  <circle cx="250" cy="220" r="180" fill="url(#auraGlow)" />
+
+  <!-- Window Frame / Office Depth Lines (Subtle) -->
+  <line x1="380" y1="0" x2="380" y2="500" stroke="rgba(255,255,255,0.06)" stroke-width="2" />
+  <line x1="120" y1="0" x2="120" y2="500" stroke="rgba(255,255,255,0.04)" stroke-width="2" />
+  <rect x="382" y="80" width="118" height="280" fill="rgba(255,255,255,0.02)" />
+
+  <!-- Outer Ring Accent -->
+  <circle cx="250" cy="245" r="215" fill="none" stroke="url(#ringGrad)" stroke-width="3" stroke-dasharray="12 8" opacity="0.6" />
+
+  <!-- Body & Shirt -->
+  <!-- Shoulders / Torso -->
+  <path d="M110 500 C120 420, 160 380, 210 370 L250 385 L290 370 C340 380, 380 420, 390 500 Z" fill="url(#shirtGrad)" />
+  <!-- Shirt Placket & Shadow -->
+  <path d="M235 385 L265 385 L260 500 L240 500 Z" fill="#E2E8F0" />
+  <line x1="250" y1="390" x2="250" y2="500" stroke="#CBD5E1" stroke-width="1.5" />
+
+  <!-- Neck -->
+  <path d="M218 290 L218 375 C230 385, 270 385, 282 375 L282 290 Z" fill="url(#skinGrad)" />
+  <!-- Neck Shadow -->
+  <path d="M218 290 C235 330, 265 330, 282 290 L282 315 C265 345, 235 345, 218 315 Z" fill="#995E39" opacity="0.4" />
+
+  <!-- Shirt Collar Left & Right -->
+  <polygon points="215,365 248,390 230,410 190,380" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1" />
+  <polygon points="285,365 252,390 270,410 310,380" fill="#F8FAFC" stroke="#CBD5E1" stroke-width="1" />
+
+  <!-- Striped Tie (Diagonal Black & Silver Stripes) -->
+  <!-- Knot -->
+  <polygon points="240,385 260,385 265,415 235,415" fill="#1E293B" />
+  <!-- Tie Body -->
+  <polygon points="238,415 262,415 272,500 228,500" fill="#0F172A" />
+  <!-- Diagonal Stripes on Tie -->
+  <polygon points="239,425 252,415 262,415 242,435" fill="#94A3B8" />
+  <polygon points="244,450 264,430 268,438 248,458" fill="#64748B" />
+  <polygon points="249,475 267,457 270,465 252,483" fill="#94A3B8" />
+  <polygon points="255,498 271,482 272,490 258,500" fill="#64748B" />
+
+  <!-- Head Base / Jaw / Face Structure -->
+  <path d="M190 190 C185 250, 205 315, 250 315 C295 315, 315 250, 310 190 C310 140, 290 120, 250 120 C210 120, 190 140, 190 190 Z" fill="url(#skinGrad)" />
+
+  <!-- Ears -->
+  <path d="M182 195 C178 180, 190 170, 192 185 L190 230 C182 235, 178 215, 182 195 Z" fill="#C6835D" />
+  <path d="M318 195 C322 180, 310 170, 308 185 L310 230 C318 235, 322 215, 318 195 Z" fill="#BA7650" />
+
+  <!-- Hair (Modern side fade with high dark quiff / pompadour) -->
+  <path d="M188 175 C185 140, 195 105, 215 95 C235 85, 280 80, 300 105 C315 120, 315 155, 312 175 C305 165, 300 145, 280 135 C250 125, 220 135, 195 165 Z" fill="url(#hairGrad)" />
+  <path d="M210 95 C230 80, 275 75, 305 95 C320 105, 325 130, 315 155 C310 130, 290 105, 260 100 C235 98, 220 102, 210 95 Z" fill="#2D3748" opacity="0.6" />
+  <!-- Side Fade Textures -->
+  <path d="M188 175 L192 210 L195 195 Z" fill="#1A202C" />
+  <path d="M312 175 L308 210 L305 195 Z" fill="#1A202C" />
+
+  <!-- Eyebrows (Strong, masculine, arched) -->
+  <path d="M208 182 C218 176, 232 176, 238 182" stroke="#1A202C" stroke-width="4.5" stroke-linecap="round" fill="none" />
+  <path d="M262 182 C268 176, 282 176, 292 182" stroke="#1A202C" stroke-width="4.5" stroke-linecap="round" fill="none" />
+
+  <!-- Eyes -->
+  <!-- Left Eye -->
+  <ellipse cx="224" cy="196" rx="9" ry="6" fill="#FFFFFF" />
+  <circle cx="225" cy="196" r="4.5" fill="#1A1A24" />
+  <circle cx="226.5" cy="194.5" r="1.5" fill="#FFFFFF" />
+  <path d="M214 193 C220 189, 230 189, 234 193" stroke="#1A202C" stroke-width="1.8" fill="none" />
+  <!-- Right Eye -->
+  <ellipse cx="276" cy="196" rx="9" ry="6" fill="#FFFFFF" />
+  <circle cx="275" cy="196" r="4.5" fill="#1A1A24" />
+  <circle cx="276.5" cy="194.5" r="1.5" fill="#FFFFFF" />
+  <path d="M266 193 C270 189, 280 189, 286 193" stroke="#1A202C" stroke-width="1.8" fill="none" />
+
+  <!-- Nose -->
+  <path d="M250 185 L247 232 C242 233, 241 237, 245 239 C249 240, 251 240, 255 239 C259 237, 258 233, 253 232 Z" fill="#AE6E49" opacity="0.65" />
+
+  <!-- Mustache (Neat, groomed) -->
+  <path d="M236 256 C242 253, 248 254, 250 256 C252 254, 258 253, 264 256 C260 259, 254 260, 250 258 C246 260, 240 259, 236 256 Z" fill="#1A202C" />
+
+  <!-- Lips -->
+  <path d="M238 266 C245 264, 255 264, 262 266" stroke="#994D36" stroke-width="2.5" stroke-linecap="round" fill="none" />
+  <path d="M242 268 C246 272, 254 272, 258 268" stroke="#873E28" stroke-width="2" stroke-linecap="round" fill="none" />
+
+  <!-- Chin Goatee / Beard Accent -->
+  <path d="M244 286 C247 284, 253 284, 256 286 C255 292, 245 292, 244 286 Z" fill="#1A202C" />
+  <ellipse cx="250" cy="302" rx="7" ry="5" fill="#1A202C" opacity="0.85" />
+
+  <!-- Subtle Rim Light on Jaw and Shoulders -->
+  <path d="M190 230 C200 280, 220 310, 250 315" stroke="rgba(255,255,255,0.18)" stroke-width="2" fill="none" />
+
+  <!-- Verified Leadership Badge Overlay -->
+  <g transform="translate(130, 435)" filter="url(#cardShadow)">
+    <rect width="240" height="42" rx="21" fill="#0F1B3D" stroke="#3B82F6" stroke-width="1.5" />
+    <circle cx="24" cy="21" r="10" fill="#2563EB" />
+    <path d="M20 21 L23 24 L29 17" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none" />
+    <text x="44" y="26" font-family="'Plus Jakarta Sans', sans-serif" font-size="13" font-weight="700" fill="#FFFFFF" letter-spacing="0.5">HUMAYUN KABIR NISHAN</text>
+  </g>
+</svg>

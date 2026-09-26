@@ -163,12 +163,18 @@
     // ============================================
     document.querySelectorAll('a[href^="#"]').forEach(function (anchor) {
         anchor.addEventListener('click', function (e) {
-            var target = document.querySelector(this.getAttribute('href'));
-            if (target) {
-                e.preventDefault();
-                var headerHeight = (header ? header.offsetHeight : 0) + 40; // topbar estimate
-                var offsetTop = target.getBoundingClientRect().top + window.scrollY - headerHeight - 20;
-                window.scrollTo({ top: offsetTop, behavior: 'smooth' });
+            var href = this.getAttribute('href');
+            if (!href || href === '#' || href === '#!') return;
+            try {
+                var target = document.querySelector(href);
+                if (target) {
+                    e.preventDefault();
+                    var headerHeight = (header ? header.offsetHeight : 0) + 40; // topbar estimate
+                    var offsetTop = target.getBoundingClientRect().top + window.scrollY - headerHeight - 20;
+                    window.scrollTo({ top: offsetTop, behavior: 'smooth' });
+                }
+            } catch (err) {
+                // Ignore invalid selector syntax
             }
         });
     });

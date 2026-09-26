@@ -1673,7 +1673,7 @@ ul.bws-nav-list ul li a:hover {
   object-fit: contain;
 }
 
-.bws-footer-logo img.bws-default-white {
+.bws-footer-logo img.bws-default-white:not([src*=".svg"]) {
   filter: brightness(0) invert(1);
 }
 
@@ -1686,9 +1686,11 @@ ul.bws-nav-list ul li a:hover {
 .bws-footer-desc {
   font-size: 0.875rem;
   line-height: 1.7;
-  color: rgba(255,255,255,0.6);
+  color: rgba(255,255,255,0.7);
   margin-bottom: 1.25rem;
-  max-width: 280px;
+  max-width: 320px;
+  word-break: break-word;
+  overflow-wrap: break-word;
 }
 
 .bws-footer-contact {
@@ -1706,6 +1708,8 @@ ul.bws-nav-list ul li a:hover {
   gap: 0.5rem;
   text-decoration: none;
   transition: color var(--bws-transition);
+  word-break: break-all;
+  overflow-wrap: break-word;
 }
 
 .bws-footer-contact a:hover { color: var(--bws-white); }
@@ -2226,8 +2230,29 @@ ul.bws-nav-list ul li a:hover {
   }
 
   .bws-footer-grid {
-    grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
-    gap: 1.5rem;
+    grid-template-columns: 1.8fr repeat(4, minmax(0, 1fr));
+    gap: 1.75rem;
+  }
+}
+
+@media (max-width: 1100px) {
+  .bws-nav { display: none; }
+  .bws-header-actions { display: none; }
+  .bws-mobile-toggle { display: flex; }
+
+  .bws-footer-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    gap: 2rem 1.5rem !important;
+  }
+
+  .bws-footer-brand {
+    grid-column: 1 / -1 !important;
+    max-width: 100% !important;
+    margin-bottom: 1rem !important;
+  }
+
+  .bws-footer-desc {
+    max-width: 580px !important;
   }
 }
 
@@ -2235,17 +2260,6 @@ ul.bws-nav-list ul li a:hover {
   .bws-nav { display: none; }
   .bws-header-actions { display: none; }
   .bws-mobile-toggle { display: flex; }
-
-  .bws-footer-grid {
-    grid-template-columns: repeat(4, 1fr);
-    gap: 2rem 1.5rem;
-  }
-
-  .bws-footer-brand {
-    grid-column: 1 / -1;
-    max-width: 540px;
-    margin-bottom: 0.5rem;
-  }
 
   .bws-tools-grid {
     grid-template-columns: repeat(2, 1fr);
@@ -2303,11 +2317,12 @@ ul.bws-nav-list ul li a:hover {
   .bws-pricing-grid { grid-template-columns: 1fr; }
 
   .bws-footer-grid {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 2rem 1.25rem !important;
   }
 
   .bws-footer-brand {
-    grid-column: 1 / -1;
+    grid-column: 1 / -1 !important;
   }
 
   .bws-cta-actions { flex-direction: column; align-items: stretch; }

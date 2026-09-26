@@ -8,6 +8,17 @@
 
 get_header();
 
+// Guard: If front page is assigned to standard page template, render complete homepage
+if ( is_front_page() ) {
+    ?>
+    <main id="primary-content" class="bws-main" role="main">
+        <?php get_template_part( 'template-parts/page-sections/home-content' ); ?>
+    </main>
+    <?php
+    get_footer();
+    return;
+}
+
 $audit_url   = bluewireseo_get_audit_url();
 $contact_url = bluewireseo_get_contact_url();
 ?>

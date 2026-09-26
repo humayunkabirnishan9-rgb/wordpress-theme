@@ -181,9 +181,6 @@ get_header();
                                         </div>
                                     </div>
                                     <?php
-                                    echo '<div class="bws-elementor-hook" style="display:none;" aria-hidden="true">';
-                                    the_content();
-                                    echo '</div>';
                                 }
                                 ?>
                             </article>

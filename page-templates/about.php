@@ -42,25 +42,44 @@ $phone       = bluewireseo_get_phone();
             </div>
 
             <!-- Meet The Strategist Section -->
-            <section class="bws-section" style="background:var(--bws-white); padding:4rem 0;">
+            <section class="bws-section" style="background:var(--bws-white); padding:4.5rem 0;">
                 <div class="bws-container">
-                    <div style="display:grid; grid-template-columns: 1fr 1.25fr; gap:3.5rem; align-items:center;">
+                    <div style="display:grid; grid-template-columns: 1.1fr 1.25fr; gap:4rem; align-items:center;">
+                        <!-- Generous Founder Portrait & Credentials Card -->
                         <div>
-                            <div style="background:linear-gradient(135deg, #0F1B3D 0%, #1E2D5A 100%); border-radius:var(--bws-radius-lg); padding:3rem 2.5rem; color:#FFFFFF; text-align:center; box-shadow:var(--bws-shadow-lg);">
-                                <div style="width:110px; height:110px; border-radius:50%; background:rgba(37,99,235,0.25); border:3px solid #60A5FA; display:flex; align-items:center; justify-content:center; margin:0 auto 1.5rem; font-size:2.5rem; font-weight:800; color:#60A5FA;">
-                                    HKN
+                            <div style="background:linear-gradient(135deg, #0F1B3D 0%, #16244C 50%, #1E2D5A 100%); border-radius:var(--bws-radius-xl); padding:3.25rem 2.5rem; color:#FFFFFF; text-align:center; box-shadow:0 14px 35px rgba(15,27,61,0.22); border:1px solid rgba(255,255,255,0.1); position:relative; overflow:hidden;">
+                                <div style="position:absolute; top:-60px; right:-60px; width:220px; height:220px; border-radius:50%; background:radial-gradient(circle, rgba(37,99,235,0.3) 0%, transparent 70%); pointer-events:none;"></div>
+                                
+                                <?php
+                                $founder_photo = get_theme_mod( 'bws_founder_photo', BLUEWIRESEO_URI . '/assets/images/humayun-kabir-nishan.svg' );
+                                ?>
+                                <div style="position:relative; width:190px; height:190px; margin:0 auto 1.75rem;">
+                                    <div style="position:absolute; inset:-6px; border-radius:50%; background:linear-gradient(135deg, #60A5FA, #2563EB, #1D4ED8); opacity:0.85; filter:blur(4px);"></div>
+                                    <img src="<?php echo esc_url( $founder_photo ); ?>" alt="<?php esc_attr_e( 'Humayun Kabir Nishan — Founder & Principal SEO Architect', 'bluewireseo' ); ?>" style="position:relative; width:100%; height:100%; object-fit:cover; border-radius:50%; border:4px solid #FFFFFF; background:#0F1B3D; display:block; box-shadow:0 8px 20px rgba(0,0,0,0.3);" />
+                                    <span style="position:absolute; bottom:6px; right:6px; background:#10B981; width:22px; height:22px; border-radius:50%; border:3px solid #0F1B3D; display:inline-block;" title="<?php esc_attr_e( 'Active & Available for US Commercial Consultations', 'bluewireseo' ); ?>"></span>
                                 </div>
-                                <h2 style="color:#FFFFFF; font-size:1.75rem; margin-bottom:0.35rem;">Humayun Kabir Nishan</h2>
-                                <p style="color:#93C5FD; font-size:1rem; font-weight:600; margin-bottom:1.25rem;"><?php esc_html_e( 'Founder & Principal SEO Architect', 'bluewireseo' ); ?></p>
-                                <p style="color:rgba(255,255,255,0.8); font-size:0.9rem; line-height:1.6; margin-bottom:1.75rem;">
-                                    <?php esc_html_e( 'Specializing in Technical, Semantic, and Local SEO for US-based OOH, airport assistance, automotive, and commercial enterprise clients.', 'bluewireseo' ); ?>
+
+                                <span style="background:rgba(37,99,235,0.3); color:#93C5FD; border:1px solid rgba(147,197,253,0.35); font-size:0.75rem; font-weight:800; letter-spacing:0.06em; text-transform:uppercase; padding:0.35rem 0.85rem; border-radius:9999px; display:inline-block; margin-bottom:0.85rem;">
+                                    <?php esc_html_e( 'FOUNDER & PRINCIPAL ARCHITECT', 'bluewireseo' ); ?>
+                                </span>
+
+                                <h2 style="color:#FFFFFF; font-size:2rem; margin-bottom:0.35rem; font-weight:800; letter-spacing:-0.02em;">
+                                    Humayun Kabir Nishan
+                                </h2>
+                                <p style="color:#60A5FA; font-size:1.0625rem; font-weight:700; margin-bottom:1.25rem;">
+                                    <?php esc_html_e( 'Founder & Principal SEO Architect', 'bluewireseo' ); ?>
                                 </p>
-                                <div style="display:flex; justify-content:center; gap:0.75rem; flex-wrap:wrap;">
-                                    <a href="<?php echo esc_url( home_url( '/contact/' ) ); ?>" class="bws-btn bws-btn-primary bws-btn-sm">
-                                        <?php esc_html_e( 'Contact Our Team', 'bluewireseo' ); ?>
+
+                                <p style="color:rgba(255,255,255,0.85); font-size:0.95rem; line-height:1.65; margin-bottom:1.75rem; max-width:420px; margin-left:auto; margin-right:auto;">
+                                    <?php esc_html_e( 'Deep code-level search engineer specializing in semantic entity modeling, technical crawl remediation, and multi-market local search architectures for commercial US enterprises.', 'bluewireseo' ); ?>
+                                </p>
+
+                                <div style="display:flex; justify-content:center; gap:0.85rem; flex-wrap:wrap;">
+                                    <a href="<?php echo esc_url( home_url( '/contact/' ) ); ?>" class="bws-btn bws-btn-primary bws-btn-sm" style="font-weight:700;">
+                                        <?php esc_html_e( 'Consult With Nishan &rarr;', 'bluewireseo' ); ?>
                                     </a>
-                                    <a href="<?php echo esc_url( 'https://linkedin.com/in/humayun-kabir-nishan' ); ?>" target="_blank" rel="noopener noreferrer" class="bws-btn bws-btn-outline" style="border-color:rgba(255,255,255,0.4); color:#FFFFFF;">
-                                        <?php esc_html_e( 'LinkedIn Profile', 'bluewireseo' ); ?>
+                                    <a href="<?php echo esc_url( home_url( '/case-studies/' ) ); ?>" class="bws-btn bws-btn-outline-white bws-btn-sm">
+                                        <?php esc_html_e( 'Inspect Client Proof', 'bluewireseo' ); ?>
                                     </a>
                                 </div>
                             </div>

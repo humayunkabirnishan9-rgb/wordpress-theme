@@ -1,0 +1,104 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" width="100%" height="100%">
+  <defs>
+    <linearGradient id="team-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0F1B3D"/>
+      <stop offset="50%" stop-color="#16244C"/>
+      <stop offset="100%" stop-color="#1E3A8A"/>
+    </linearGradient>
+    <linearGradient id="glow" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#2563EB" stop-opacity="0.3"/>
+      <stop offset="50%" stop-color="#60A5FA" stop-opacity="0.6"/>
+      <stop offset="100%" stop-color="#2563EB" stop-opacity="0.3"/>
+    </linearGradient>
+    <filter id="card-shadow" x="-5%" y="-5%" width="110%" height="110%">
+      <feDropShadow dx="0" dy="10" stdDeviation="15" flood-color="#000" flood-opacity="0.3"/>
+    </filter>
+  </defs>
+
+  <rect width="800" height="450" rx="20" fill="url(#team-bg)"/>
+
+  <!-- Analytics & Network Background Graphics -->
+  <g opacity="0.1" stroke="#FFFFFF" stroke-width="1">
+    <circle cx="400" cy="225" r="180" fill="none"/>
+    <circle cx="400" cy="225" r="280" fill="none"/>
+    <line x1="0" y1="225" x2="800" y2="225"/>
+    <line x1="400" y1="0" x2="400" y2="450"/>
+  </g>
+
+  <!-- Data Graphs in Ambient Space -->
+  <path d="M 80,360 Q 200,280 320,320 T 560,240 T 720,180" fill="none" stroke="#60A5FA" stroke-width="3" opacity="0.35"/>
+  <path d="M 80,380 Q 220,320 360,350 T 600,280 T 720,220" fill="none" stroke="#2563EB" stroke-width="2" opacity="0.25"/>
+
+  <!-- Section Title & Badge inside Artwork -->
+  <g transform="translate(40, 45)">
+    <rect width="210" height="30" rx="15" fill="rgba(37,99,235,0.3)" stroke="rgba(96,165,250,0.4)" stroke-width="1"/>
+    <circle cx="16" cy="15" r="4" fill="#60A5FA"/>
+    <text x="30" y="20" font-family="'Inter', sans-serif" font-size="11" font-weight="700" fill="#93C5FD" letter-spacing="0.8">BLUEWIRESEO SPECIALIST SQUAD</text>
+    <text x="0" y="65" font-family="'Plus Jakarta Sans', sans-serif" font-size="24" font-weight="800" fill="#FFFFFF" letter-spacing="-0.5">Humayun Kabir Nishan &amp; Senior SEO Team</text>
+    <text x="0" y="90" font-family="'Inter', sans-serif" font-size="13" font-weight="500" fill="rgba(255,255,255,0.7)">Dedicated Technical, Semantic &amp; Local Search Engineers for Commercial US Growth</text>
+  </g>
+
+  <!-- 4 Team Pillars / Specialist Pods -->
+  <!-- Pod 1: Nishan (Lead Architect) -->
+  <g transform="translate(40, 170)" filter="url(#card-shadow)">
+    <rect width="165" height="235" rx="14" fill="#0F172A" stroke="#2563EB" stroke-width="2"/>
+    <circle cx="82" cy="65" r="38" fill="#1E293B" stroke="#60A5FA" stroke-width="2"/>
+    <!-- Avatar Icon / Nishan -->
+    <circle cx="82" cy="55" r="16" fill="#E2B184"/>
+    <path d="M66 85 C66 73 98 73 98 85 Z" fill="#2563EB"/>
+    <rect x="74" y="52" width="7" height="5" rx="1" fill="#0F172A"/>
+    <rect x="83" y="52" width="7" height="5" rx="1" fill="#0F172A"/>
+    <!-- Text -->
+    <text x="82" y="128" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="13" font-weight="800" fill="#FFFFFF">H. K. Nishan</text>
+    <text x="82" y="146" text-anchor="middle" font-family="'Inter', sans-serif" font-size="10" font-weight="700" fill="#60A5FA">FOUNDER &amp; ARCHITECT</text>
+    <rect x="22" y="162" width="121" height="1" fill="rgba(255,255,255,0.1)"/>
+    <text x="82" y="180" text-anchor="middle" font-family="'Inter', sans-serif" font-size="10" fill="rgba(255,255,255,0.7)">Semantic Graph Design</text>
+    <text x="82" y="196" text-anchor="middle" font-family="'Inter', sans-serif" font-size="10" fill="rgba(255,255,255,0.7)">Forensic Crawl Audits</text>
+    <text x="82" y="212" text-anchor="middle" font-family="'Inter', sans-serif" font-size="10" fill="rgba(255,255,255,0.7)">Client Strategy Direct</text>
+  </g>
+
+  <!-- Pod 2: Technical Crawl Engineer -->
+  <g transform="translate(225, 170)" filter="url(#card-shadow)">
+    <rect width="165" height="235" rx="14" fill="#0F172A" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+    <circle cx="82" cy="65" r="38" fill="#1E293B" stroke="#3B82F6" stroke-width="1.5"/>
+    <circle cx="82" cy="55" r="16" fill="#D4A373"/>
+    <path d="M66 85 C66 73 98 73 98 85 Z" fill="#334155"/>
+    <!-- Text -->
+    <text x="82" y="128" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="13" font-weight="800" fill="#FFFFFF">Technical Pod</text>
+    <text x="82" y="146" text-anchor="middle" font-family="'Inter', sans-serif" font-size="10" font-weight="700" fill="#93C5FD">CRAWL &amp; CORE WEB VITALS</text>
+    <rect x="22" y="162" width="121" height="1" fill="rgba(255,255,255,0.1)"/>
+    <text x="82" y="180" text-anchor="middle" font-family="'Inter', sans-serif" font-size="10" fill="rgba(255,255,255,0.7)">Server Log Forensics</text>
+    <text x="82" y="196" text-anchor="middle" font-family="'Inter', sans-serif" font-size="10" fill="rgba(255,255,255,0.7)">Canonical Remediation</text>
+    <text x="82" y="212" text-anchor="middle" font-family="'Inter', sans-serif" font-size="10" fill="rgba(255,255,255,0.7)">DOM Hydration &amp; CWV</text>
+  </g>
+
+  <!-- Pod 3: Semantic & Schema Engineer -->
+  <g transform="translate(410, 170)" filter="url(#card-shadow)">
+    <rect width="165" height="235" rx="14" fill="#0F172A" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+    <circle cx="82" cy="65" r="38" fill="#1E293B" stroke="#3B82F6" stroke-width="1.5"/>
+    <circle cx="82" cy="55" r="16" fill="#E2B184"/>
+    <path d="M66 85 C66 73 98 73 98 85 Z" fill="#1E3A8A"/>
+    <!-- Text -->
+    <text x="82" y="128" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="13" font-weight="800" fill="#FFFFFF">Semantic Pod</text>
+    <text x="82" y="146" text-anchor="middle" font-family="'Inter', sans-serif" font-size="10" font-weight="700" fill="#93C5FD">SCHEMA &amp; ENTITIES</text>
+    <rect x="22" y="162" width="121" height="1" fill="rgba(255,255,255,0.1)"/>
+    <text x="82" y="180" text-anchor="middle" font-family="'Inter', sans-serif" font-size="10" fill="rgba(255,255,255,0.7)">JSON-LD Graph Modeling</text>
+    <text x="82" y="196" text-anchor="middle" font-family="'Inter', sans-serif" font-size="10" fill="rgba(255,255,255,0.7)">Topical Cluster Silos</text>
+    <text x="82" y="212" text-anchor="middle" font-family="'Inter', sans-serif" font-size="10" fill="rgba(255,255,255,0.7)">AI Overview Optimization</text>
+  </g>
+
+  <!-- Pod 4: Local & Authority Outreach -->
+  <g transform="translate(595, 170)" filter="url(#card-shadow)">
+    <rect width="165" height="235" rx="14" fill="#0F172A" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+    <circle cx="82" cy="65" r="38" fill="#1E293B" stroke="#3B82F6" stroke-width="1.5"/>
+    <circle cx="82" cy="55" r="16" fill="#C59263"/>
+    <path d="M66 85 C66 73 98 73 98 85 Z" fill="#0284C7"/>
+    <!-- Text -->
+    <text x="82" y="128" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="13" font-weight="800" fill="#FFFFFF">Growth Pod</text>
+    <text x="82" y="146" text-anchor="middle" font-family="'Inter', sans-serif" font-size="10" font-weight="700" fill="#93C5FD">LOCAL &amp; AUTHORITY</text>
+    <rect x="22" y="162" width="121" height="1" fill="rgba(255,255,255,0.1)"/>
+    <text x="82" y="180" text-anchor="middle" font-family="'Inter', sans-serif" font-size="10" fill="rgba(255,255,255,0.7)">Multi-Metro GBP 3-Pack</text>
+    <text x="82" y="196" text-anchor="middle" font-family="'Inter', sans-serif" font-size="10" fill="rgba(255,255,255,0.7)">Editorial Backlink PR</text>
+    <text x="82" y="212" text-anchor="middle" font-family="'Inter', sans-serif" font-size="10" fill="rgba(255,255,255,0.7)">Weekly GSC Telemetry</text>
+  </g>
+</svg>

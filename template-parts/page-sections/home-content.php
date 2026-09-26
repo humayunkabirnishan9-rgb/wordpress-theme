@@ -148,7 +148,7 @@ $contact_url = bluewireseo_get_contact_url();
                         <h3 style="font-size: 1.25rem; margin-bottom: 0.625rem;">
                             <a href="<?php the_permalink(); ?>" style="color: inherit; text-decoration: none;"><?php the_title(); ?></a>
                         </h3>
-                        <p style="font-size: 0.9rem; margin-bottom: 1.25rem; color: var(--bws-text-secondary);"><?php the_excerpt(); ?></p>
+                        <div class="bws-service-card-desc" style="font-size: 0.9rem; margin-bottom: 1.25rem; color: var(--bws-text-secondary); line-height: 1.6;"><?php the_excerpt(); ?></div>
                         <a href="<?php echo esc_url( $cta_url ); ?>" class="bws-link-arrow">
                             <?php echo esc_html( $cta_text ); ?>
                             <?php echo bluewireseo_icon( 'arrow-right' ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
